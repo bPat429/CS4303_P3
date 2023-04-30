@@ -49,7 +49,9 @@ final class ExplorationHandler {
     }
 
     // Main method used to run the gameloop while the player is exploring a dungeon level.
-    void run(boolean[] input_array, float frame_duration) {
+    // Return Return -2 to continue, -1 to go to the ending screen, or the character index
+    // to go to the dialogue screen
+    int run(boolean[] input_array, float frame_duration) {
         // Handle character Movement
         player.handleInput(input_array, frame_duration);
         // TODO Handle character collisions
@@ -61,12 +63,17 @@ final class ExplorationHandler {
             // Check if any items are close
             int index = checkInteractablessProximity();
             if (index > -1) {
+                // If the front door then trigger the final screen
+                if(interactables.get(index).getType() == 2) {
+
+                }
                 // TODO implement interactions
-                 interactables.get(index).interact();
+                interactables.get(index).interact();
             }
         }
         // draw level
         drawScreen();
+        return -2;
     }
 
     void drawScreen() {
