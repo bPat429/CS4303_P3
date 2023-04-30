@@ -18,23 +18,23 @@ final class ExplorationHandler {
     private int tile_size;
     private final int test_room_size = 10;
 
-    ExplorationHandler(int tile_size) {
+    ExplorationHandler(int tile_size, Random rand) {
         // Initialise the player
-        // this.player = new Player();
+        this.player = new Player();
         this.tile_size = tile_size;
         this.rand = rand;
-        generateBasicRoom();
+        generateMansion();
         this.search_cooldown = millis();
     }
 
     // Generate the dungeon level
-    int[] generateRoom() {
+    void generateMansion() {
         interactables = new ArrayList<Interactable>();
         tile_map = new int[test_room_size][test_room_size];
         // TODO actually implement rooms based on the tilemap
         // TODO spawn in interactables (characters and clues)
+        interactables.add(new FrontDoor(1, 1));
         // TODO spawn in entry/exit door (also an interactable, used to end the game)
-        
     }
 
     // Return the index of the first object which is close enough to interact with
@@ -62,7 +62,7 @@ final class ExplorationHandler {
             int index = checkInteractablessProximity();
             if (index > -1) {
                 // TODO implement interactions
-                // interactables.get(index).interact(player)
+                 interactables.get(index).interact();
             }
         }
         // draw level
@@ -70,7 +70,7 @@ final class ExplorationHandler {
     }
 
     void drawScreen() {
-        background(125);
+        background(0);
         pushMatrix();
         PVector player_location = player.getLocation();
         translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);

@@ -6,7 +6,7 @@ final int tile_size = 50;
 
 
 // Screen handlers
-ExplorationHandler exploration_handler = new ExplorationHandler(tile_size);
+ExplorationHandler exploration_handler;
 
 
 // Current screen
@@ -15,6 +15,7 @@ int current_screen;
 // Global variables
 float prev_frame_millis;
 float frame_duration;
+Random rand;
 // Array of Booleans used to track user inputs
 // corresponding to:
 // a pressed, d pressed, w pressed, s pressed, q pressed, e pressed, f pressed
@@ -22,22 +23,26 @@ boolean[] input_array = new boolean[]{false, false, false, false, false, false, 
 
 void setup() {
     fullScreen();
+    rand = new Random();
     current_screen = 0;
+    exploration_handler = new ExplorationHandler(tile_size, rand);
 }
 
 void enterExplorationScreen() {
     prev_frame_millis = millis();
-    game_state = 1;
+    current_screen = 1;
 }
 
 void draw() {
     switch (current_screen) {
         case 0:
             // Intro screen
+            current_screen = 1;
             break;
         case 1:
-            frame_duration = (millis() - prev_frame_millis);
+            frame_duration = (millis() - prev_frame_millis)/1000;
             // Exploration screen
+            exploration_handler.run(input_array, frame_duration);
             break;
         case 2:
             // Ending screen
