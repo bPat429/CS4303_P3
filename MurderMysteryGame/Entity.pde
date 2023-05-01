@@ -14,21 +14,17 @@ public class Entity {
     private float entity_speed;
     // 2D movement vector, movement_vector[0] = x axis, movement_vector[1] = y axis
     private PVector movement_vector;
+    
+    private String name;
 
-    private String type;
-
-    Entity(int spawn_x, int spawn_y, String type) {
+    Entity(int spawn_x, int spawn_y, String name) {
         this.location = new PVector(spawn_x, spawn_y);
         this.orientation = 0;
+        this.name = name;
         this.movement_vector = new PVector(0, 0);
         this.interact_radius = 0.25;
         this.rotation_const = 0.1;
         this.entity_speed = 4;
-        this.type = type;
-    }
-
-    String getType() {
-        return type;
     }
 
     PVector getLocation() {

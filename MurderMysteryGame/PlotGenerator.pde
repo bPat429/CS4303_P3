@@ -37,7 +37,6 @@ class PlotGenerator {
         for (int i = 0; i < cast.len(); i++) {
             // TODO properly place characters
             cast.getCharacter(i).setPosition(i + 1, i + 2);
-            interactables.add(cast.getCharacter(i));
         }
         
         // TODO handle physical clues

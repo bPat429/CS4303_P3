@@ -99,6 +99,12 @@ final class ExplorationHandler {
                 interactables.get(i).drawComponent(tile_size);
             }
         }
+        // Draw all NPC's
+        for (int i = 0; i < cast.len(); i++) {
+            if (cast.getCharacter(i) != null) {
+                cast.getCharacter(i).drawComponent(tile_size);
+            }
+        }
         // Draw the player
         player.drawComponent(tile_size);
         popMatrix();
