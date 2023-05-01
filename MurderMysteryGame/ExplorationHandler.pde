@@ -2,6 +2,10 @@ import java.util.Random;
 import java.util.ArrayList;
 
 final class ExplorationHandler {
+    // The class used for handling the cast of the murder mystery
+    CharacterCast cast;
+    // The class used for generating a plot for the murder mystery
+    PlotGenerator plot_gen;
     // An array representing the contents of each tile in the manor.
     // 0 = unpopulated space
     // 1 = room space
@@ -23,6 +27,13 @@ final class ExplorationHandler {
         this.player = new Player();
         this.tile_size = tile_size;
         this.rand = rand;
+        // Initialise the character cast
+        cast = new CharacterCast(rand);
+        
+        // Generate the plot
+        plot_gen = new PlotGenerator(cast, rand);
+
+
         generateMansion();
         this.search_cooldown = millis();
     }

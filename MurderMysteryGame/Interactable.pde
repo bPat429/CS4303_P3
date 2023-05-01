@@ -10,8 +10,10 @@ class Interactable {
   private PImage interactable_image;
   // Radius used to tune how far the player may be and still interact
   private float interact_radius;
+  private String name;
 
-  Interactable(int x_pos, int y_pos, int type) {
+  Interactable(int x_pos, int y_pos, int type, String name) {
+    this.name = name;
     this.location = new int[]{x_pos, y_pos};
     // Set default interact_radius to slightly smaller than a tile
     this.interact_radius = 0.4;
@@ -28,6 +30,10 @@ class Interactable {
 
   int[] getLocation() {
     return location;
+  }
+
+  void setLocation(int x_pos, int y_pos) {
+    this.location = new int[]{x_pos, y_pos};
   }
 
   PImage getImage() {

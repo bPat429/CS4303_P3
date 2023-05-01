@@ -1,14 +1,15 @@
 // Front door class
-// Interact with this to make an accusation and end the game
+// Interact with this to go to the end game screen (make an accusation then end the game)
 class FrontDoor extends Interactable {
 
  FrontDoor(int x_pos, int y_pos) {
     super(x_pos, y_pos, 2);
+    // TODO make a better door image
     super.interactable_image = loadImage("door_placeholder.png");
   }
   
   public boolean interact() {
-    System.out.println("TODO");
+    System.out.println("GO TO ACCUSATION SCREEN");
     return false;
   }
   

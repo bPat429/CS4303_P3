@@ -1,4 +1,5 @@
 // Superclass for all entities that move and collide
+// We can use this for NPC's if we want to implement roaming, or chores
 public class Entity {
     // Use a float to allow the player to move in smaller increments without needing to 'step' across tiles.
     private PVector location;
