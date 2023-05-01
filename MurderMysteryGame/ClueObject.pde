@@ -11,10 +11,14 @@ class ClueObject extends Interactable {
   }
   
   // Generic interact method to be overided
-  // This represents interacting with the object while in the dungeon level screen
-  // Returns true if the item should be removed from the interactables list.
+  // TODO show text in game
+  // Currently prints to the terminal when interacted with
+  // Consider printing onto a 'notepad' which acts as a log
+  // for all player interactions in order of interaction?
   public boolean interact() {
-    print("Error, interaction not implemented yet");
+    for (int i = 0; i < hints.size(); i++) {
+      print(hints.get(i));
+    }
     return false;
   }
 

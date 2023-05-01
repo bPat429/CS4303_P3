@@ -32,6 +32,16 @@ class NPC extends Entity {
         // Set role to bystander by default
         role = 0;
     }
+
+    // Generic interact method to be overided
+    // TODO show text in game
+    // Currently prints to the terminal when interacted with
+    public boolean interact() {
+        for (int i = 0; i < dialogue.size(); i++) {
+        print(dialogue.get(i));
+        }
+        return false;
+    }
     
     void setImage (String image_loc) {
       super.entity_image = loadImage(image_loc);

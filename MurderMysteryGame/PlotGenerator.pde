@@ -25,8 +25,10 @@ class PlotGenerator {
 
         // TODO get rid of this filler method
 
-        // Apply changes to the cast of characters according to the generated pla
+        // Apply changes to the cast of characters according to the generated plan
         // TODO stop this from being hard-coded
+        int murderer_index = 0;
+        int victim_index = 1;
         murderer = cast.getCharacter(0);
         murderer.setRole(1);
         victim = cast.getCharacter(1);

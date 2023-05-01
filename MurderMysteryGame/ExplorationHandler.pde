@@ -33,7 +33,10 @@ final class ExplorationHandler {
         // Generate the plot
         plot_gen = new PlotGenerator(cast, rand);
 
+        // Add physical clues
         interactables = plot_gen.getInteractables();
+
+        // Spawn in exit door for game over
         interactables.add(new FrontDoor(1, 1));
         
         generateMansion();
@@ -44,8 +47,6 @@ final class ExplorationHandler {
     void generateMansion() {
         tile_map = new int[test_room_size][test_room_size];
         // TODO actually implement rooms based on the tilemap
-        // TODO spawn in interactables (characters and clues)
-        // TODO spawn in entry/exit door (also an interactable, used to end the game)
     }
 
     // Return the index of the first object which is close enough to interact with
@@ -53,6 +54,21 @@ final class ExplorationHandler {
     int checkInteractablessProximity() {
         for (int i = 0; i < interactables.size(); i++) {
             if (interactables.get(i).checkCollision(player)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Return the index of the first character who is close enough to interact
+    // -1 if none are close
+    int checkCharacterProximity() {
+        PVector player_location = player.getLocation();
+        for (int i = 0; i < cast.len(); i++) {
+            float d = cast.getCharacter(i).getDistance(player);
+            float sum_radius = cast.getCharacter(i).getInteractRadius() + player.getInteractRadius();
+            // Make it easier to collide with the player
+            if (sum_radius + 0.25 >= d) {
                 return i;
             }
         }
@@ -76,10 +92,18 @@ final class ExplorationHandler {
             if (index > -1) {
                 // If the front door then trigger the final screen
                 if(interactables.get(index).getType() == 2) {
-
+                    // TODO
                 }
                 // TODO implement interactions
                 interactables.get(index).interact();
+            } else {
+                // Check if any characters are close
+                index = checkCharacterProximity();
+                if (index > -1) {
+                    cast.getCharacter(index).interact();
+                    // TODO check for index >= 0, then go to dialogue screen with (index) character
+                    return index;
+                }
             }
         }
         // draw level
