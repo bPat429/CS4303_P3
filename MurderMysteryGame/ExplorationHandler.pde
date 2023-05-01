@@ -33,18 +33,18 @@ final class ExplorationHandler {
         // Generate the plot
         plot_gen = new PlotGenerator(cast, rand);
 
-
+        interactables = plot_gen.getInteractables();
+        interactables.add(new FrontDoor(1, 1));
+        
         generateMansion();
         this.search_cooldown = millis();
     }
 
     // Generate the dungeon level
     void generateMansion() {
-        interactables = new ArrayList<Interactable>();
         tile_map = new int[test_room_size][test_room_size];
         // TODO actually implement rooms based on the tilemap
         // TODO spawn in interactables (characters and clues)
-        interactables.add(new FrontDoor(1, 1));
         // TODO spawn in entry/exit door (also an interactable, used to end the game)
     }
 

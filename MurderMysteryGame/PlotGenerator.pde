@@ -28,11 +28,11 @@ class PlotGenerator {
         // Apply changes to the cast of characters according to the generated pla
         // TODO stop this from being hard-coded
         murderer = cast.getCharacter(0);
-        murder.setRole(1);
+        murderer.setRole(1);
         victim = cast.getCharacter(1);
         victim.setRole(2);
-        bystander = cast.getCharacter(2);
-        bystander.addDialogue("John hated Alistar because both were in love with me");
+        NPC bystander = cast.getCharacter(2);
+        bystander.addDialogue("John hated Alistar, they argued frequently");
         
         for (int i = 0; i < cast.len(); i++) {
             // TODO properly place characters
@@ -41,5 +41,9 @@ class PlotGenerator {
         }
         
         // TODO handle physical clues
+    }
+    
+    ArrayList<Interactable> getInteractables() {
+      return interactables;
     }
 }

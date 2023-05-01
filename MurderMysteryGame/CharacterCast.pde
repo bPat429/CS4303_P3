@@ -15,13 +15,13 @@ final class CharacterCast {
         // 4 = guest
 
         // Add John the Butler
-        cast.add(new NPC("John", 0, rand, johnButlerDialogue(), "NPC_placeholder"));   
+        cast.add(new NPC("John", 0, rand, johnButlerDialogue()));   
 
         // Add Andrew the Maid
-        cast.add(new NPC("Andrew", 1, rand, andrewMaidDialogue(), "NPC_placeholder"));   
+        cast.add(new NPC("Andrew", 1, rand, andrewMaidDialogue()));   
 
         // Add Elisa the Lady of the house
-        cast.add(new NPC("Elisa", 2, rand, elisaOwnerDialogue(), "NPC_placeholder"));
+        cast.add(new NPC("Elisa", 2, rand, elisaOwnerDialogue()));
     }
 
     public ArrayList<NPC> getCast() {
