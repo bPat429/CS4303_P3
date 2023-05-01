@@ -4,8 +4,7 @@ class Interactable {
   private int[] location;
   // Type of the interactable
   // 0 = physical clue
-  // 1 = character
-  // 2 = exit door
+  // 1 = exit door
   private int type;
   private PImage interactable_image;
   // Radius used to tune how far the player may be and still interact
@@ -63,10 +62,19 @@ class Interactable {
     print("Error, use not implemented yet");
     return false;
   }
-
-  // Generic draw method to be overided
-  void drawComponent(int tile_size) {
-    fill(0, 255, 0);
-    rect(location[0] * tile_size, location[1] * tile_size, tile_size, tile_size);
-  }
+  
+  public void drawComponent(int tile_size) {
+        float obj_x = tile_size * location[0];
+        float obj_y = tile_size * location[1];
+        pushMatrix();
+        translate(obj_x + tile_size/2, obj_y + tile_size/2);
+        if (interactable_image != null) {
+            image(interactable_image, -tile_size/2, -tile_size/2, tile_size , tile_size);
+        } else {
+            // Default to a green square in case of no image
+            fill(0, 255, 0);
+            rect(location[0] * tile_size, location[1] * tile_size, tile_size, tile_size);
+        }
+        popMatrix();
+    }
 }

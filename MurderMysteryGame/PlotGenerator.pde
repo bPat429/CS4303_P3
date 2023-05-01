@@ -38,8 +38,16 @@ class PlotGenerator {
             // TODO properly place characters
             cast.getCharacter(i).setPosition(i + 1, i + 2);
         }
+
+
+        ClueObjects clues = new ClueObjects(rand, new boolean[]{true});
         
         // TODO handle physical clues
+        for (int i = 0; i < clues.len(); i++) {
+            // TODO properly place clues in the mansion
+            clues.getClue(i).setPosition(-i - 1, -i - 2);
+            interactables.add(clues.getClue(i));
+        }
     }
     
     ArrayList<Interactable> getInteractables() {
