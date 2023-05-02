@@ -19,7 +19,7 @@ class NPC extends Entity {
     // 3 = chef
     // 4 = guest
     int job;
-
+// TEST COMMENT DELETE THIS
 
     // Create an NPC
     // Automatically set position to (0, 0) before moving them to their required position after generating the plot
