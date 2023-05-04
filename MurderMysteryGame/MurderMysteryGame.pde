@@ -52,21 +52,21 @@ void draw() {
     }
     prev_frame_millis = millis();
 }
-
 void keyPressed() {
-    if (key == 'a' || key == 'A') {
+    if (keyCode == LEFT) {
         input_array[0] = true;
     }
-    if (key == 'd' || key == 'D') {
+    if (keyCode == RIGHT) {
         input_array[1] = true;
     }
-    if (key == 'w' || key == 'W') {
+    if (keyCode == UP) {
         input_array[2] = true;
     }
-    if (key == 's' || key == 'S') {
+    if (keyCode == DOWN) {
         input_array[3] = true;
     }
-    if (key == 'q' || key == 'Q') {
+    
+        if (key == 'q' || key == 'Q') {
         input_array[4] = true;
     }
     if (key == 'e' || key == 'E') {
@@ -81,19 +81,19 @@ void keyPressed() {
 }
 
 void keyReleased() {
-    if (key == 'a' || key == 'A') {
+    if (keyCode == LEFT) {
         input_array[0] = false;
     }
-    if (key == 'd' || key == 'D') {
+    if (keyCode == RIGHT) {
         input_array[1] = false;
     }
-    if (key == 'w' || key == 'W') {
+    if (keyCode == UP) {
         input_array[2] = false;
     }
-    if (key == 's' || key == 'S') {
+    if (keyCode == DOWN) {
         input_array[3] = false;
     }
-    if (key == 'q' || key == 'Q') {
+        if (key == 'q' || key == 'Q') {
         input_array[4] = false;
     }
     if (key == 'e' || key == 'E') {

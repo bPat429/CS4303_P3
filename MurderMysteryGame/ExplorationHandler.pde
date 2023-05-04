@@ -112,11 +112,22 @@ final class ExplorationHandler {
     }
 
     void drawScreen() {
-        background(0);
+        background(255);
         pushMatrix();
         PVector player_location = player.getLocation();
         translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);
         // TODO Draw the tile_map/mansion
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // Draw all interactables
         for (int i = 0; i < interactables.size(); i++) {
             if (interactables.get(i) != null) {

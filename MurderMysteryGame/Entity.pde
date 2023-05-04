@@ -6,8 +6,12 @@ public class Entity {
     private PImage entity_image;
     // Interact radius used to tune the size of the entity
     private float interact_radius;
-    // Orientation value between -pi, pi
-    private float orientation;
+    // Orientation value:
+    // 0 = North
+    // 1 = East
+    // 2 = South
+    // 3 = West
+    private int orientation;
     // Rotation speed
     final float rotation_const;
     // Entity speed
@@ -71,11 +75,8 @@ public class Entity {
         return this.entity_image;
     }
 
-    void rotateEntity(float rotation) {
-        orientation = orientation + rotation;
-        // Ensure orientation remains in limits
-        orientation = (orientation > (float) Math.PI) ? orientation - (float) Math.PI * 2 : orientation;
-        orientation = (orientation < -1 * (float) Math.PI) ? orientation + (float) Math.PI * 2 : orientation;
+    void rotateEntity(int direction) {
+        orientation = direction;
     }
 
     // Player movement vector comes from user inputs
@@ -83,16 +84,14 @@ public class Entity {
     void moveEntity(float frame_duration) {
         if (movement_vector.x != 0 || movement_vector.y != 0) {
             movement_vector.normalize();
-            float heading_diff = movement_vector.heading() - orientation + (float) (0.5 * Math.PI);
-            // Always rotate the shortest distance necessary
-            if (heading_diff > (float) Math.PI) {
-                heading_diff = heading_diff - (float) (2 * Math.PI);
-            } else if (heading_diff < -1 * (float) Math.PI) {
-                heading_diff = (float) (2 * Math.PI) + heading_diff;
+            int direction = 0;
+            direction = (movement_vector.y > 0) ? 2 : 0;
+            if (movement_vector.x != 0) {
+              direction = (movement_vector.x < 0) ? 3 : 1;
             }
 
             // Slow down rotation in direction of travel to look smooth
-            rotateEntity(heading_diff/10);
+            rotateEntity(direction);
             // Update location
             movement_vector.setMag(entity_speed);
             location.add(movement_vector.x * frame_duration, movement_vector.y * frame_duration);
@@ -200,13 +199,14 @@ public class Entity {
             
         }
     }
+ 
 
     public void drawComponent(int tile_size) {
         float entity_x = tile_size * location.x;
         float entity_y = tile_size * location.y;
         pushMatrix();
         translate(entity_x + tile_size/2, entity_y + tile_size/2);
-        rotate(orientation);
+        //rotate(orientation);
         if (entity_image != null) {
             image(entity_image, -tile_size/2, -tile_size/2, tile_size , tile_size);
         } else {
