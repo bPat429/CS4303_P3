@@ -17,38 +17,64 @@ final class ExplorationHandler {
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
     private float search_cooldown;
+ PImage tile1a = loadImage("tile1a.png");
 
     // The size of each tile
     private int tile_size;
     private final int test_room_size = 10;
 
-    ExplorationHandler(int tile_size, Random rand) {
-        // Initialise the player
-        this.player = new Player();
-        this.tile_size = tile_size;
-        this.rand = rand;
-        // Initialise the character cast
-        cast = new CharacterCast(rand);
-        
-        // Generate the plot
-        plot_gen = new PlotGenerator(cast, rand);
+   ExplorationHandler(int tile_size, Random rand) {
+    // Initialise the player
+    this.player = new Player();
+    this.tile_size = tile_size;
+    this.rand = rand;
+    // Initialise the character cast
+    cast = new CharacterCast(rand);
+    
+    // Generate the plot
+    plot_gen = new PlotGenerator(cast, rand);
 
-        // Add physical clues
-        interactables = plot_gen.getInteractables();
+    // Add physical clues
+    interactables = plot_gen.getInteractables();
 
-        // Spawn in exit door for game over
-        interactables.add(new FrontDoor(1, 1));
-        
-        generateMansion();
-        this.search_cooldown = millis();
-    }
+    // Spawn in exit door for game over
+    interactables.add(new FrontDoor(1, 1));
+    
+    generateMansion(); // call the method to generate the mansion/tile map
+    this.search_cooldown = millis();
+}
+
+
+
+
 
     // Generate the dungeon level
     void generateMansion() {
-        tile_map = new int[test_room_size][test_room_size];
-        // TODO actually implement rooms based on the tilemap
-    }
+ 
+       String[] tilemap_lines = loadStrings("data/txt/Tilemap.txt");
+   int map_height = tilemap_lines.length;
+  int map_width = tilemap_lines[0].length();
 
+  // create the tile map
+  tile_map = new int[map_height][map_width];
+
+  // read the tile map from the text file
+for (int y = 0; y < map_height; y++) {
+    String line = tilemap_lines[y];
+    System.out.println("line=" + line);
+    for (int x = 0; x < map_width; x++) {
+        char tile_char = line.charAt(x);
+        if (tile_char == '0') {
+            tile_map[y][x] = 0; // floor
+        } else if (tile_char == '1') {
+            tile_map[y][x] = 1; // wall
+        }
+    }
+}
+}
+        
+        
+         
     // Return the index of the first object which is close enough to interact with
     // -1 if none are close
     int checkInteractablessProximity() {
@@ -106,42 +132,63 @@ final class ExplorationHandler {
                 }
             }
         }
+        
         // draw level
         drawScreen();
         return -2;
-    }
+}
 
-    void drawScreen() {
-        background(255);
-        pushMatrix();
-        PVector player_location = player.getLocation();
-        translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);
-        // TODO Draw the tile_map/mansion
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // Draw all interactables
-        for (int i = 0; i < interactables.size(); i++) {
-            if (interactables.get(i) != null) {
-                interactables.get(i).drawComponent(tile_size);
-            }
-        }
-        // Draw all NPC's
-        for (int i = 0; i < cast.len(); i++) {
-            if (cast.getCharacter(i) != null) {
-                cast.getCharacter(i).drawComponent(tile_size);
-            }
-        }
-        // Draw the player
-        player.drawComponent(tile_size);
-        popMatrix();
+
+
+
+      
+
+
+     void drawScreen() {
+  background(255);
+  pushMatrix();
+  PVector player_location = player.getLocation();
+  translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);
+
+  for (int y = 0; y < tile_map.length; y++) {
+    for (int x = 0; x < tile_map[0].length; x++) {
+      if (tile_map[y][x] == 0) {
+        // Show tile1a image for unpopulated spaces
+ fill(128);
+        rect(x * tile_size, y * tile_size, tile_size, tile_size);     
+      } 
+      else if (tile_map[y][x] == 1) {
+       
+                image(tile1a, x * tile_size, y * tile_size, tile_size, tile_size);
+
+      } else {
+        fill(0);
+        rect(x * tile_size, y * tile_size, tile_size, tile_size);
+      }
     }
+  }
+
+  // Draw all interactables
+  for (int i = 0; i < interactables.size(); i++) {
+    if (interactables.get(i) != null) {
+      interactables.get(i).drawComponent(tile_size);
+    }
+  }
+  
+  // Draw all NPCs
+  for (int i = 0; i < cast.len(); i++) {
+    if (cast.getCharacter(i) != null) {
+      cast.getCharacter(i).drawComponent(tile_size);
+    }
+  }
+  
+  // Draw the player
+  player.drawComponent(tile_size);
+  
+  popMatrix();
+}
+
+ 
+
+
 }

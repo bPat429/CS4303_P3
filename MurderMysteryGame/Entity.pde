@@ -18,7 +18,7 @@ public class Entity {
     private float entity_speed;
     // 2D movement vector, movement_vector[0] = x axis, movement_vector[1] = y axis
     private PVector movement_vector;
-    
+ 
     private String name;
 
     Entity(int spawn_x, int spawn_y, String name) {
@@ -39,6 +39,7 @@ public class Entity {
     float getDistance(Entity other_entity) {
         return this.location.dist(other_entity.getLocation());
     }
+
 
     // Method used to help monsters pathfind to the player
     // This is necessary because a tile's true position is the top left corner of what is displayed,
@@ -75,9 +76,12 @@ public class Entity {
         return this.entity_image;
     }
 
+
     void rotateEntity(int direction) {
         orientation = direction;
     }
+
+
 
     // Player movement vector comes from user inputs
     // Monster movement vector comes from pathfinding function
@@ -97,6 +101,8 @@ public class Entity {
             location.add(movement_vector.x * frame_duration, movement_vector.y * frame_duration);
         }   
     }
+    
+    
 
     // Method used for checking if the entity's central point is inside a wall
     boolean wallContainsPoint(int[] wall_coords, PVector char_loc) {
@@ -106,11 +112,15 @@ public class Entity {
             && loc_y < wall_coords[1] + 0.5 && loc_y > wall_coords[1] - 0.5);
     }
     
+    
+    
+    
     // Method used for checking if the entity intersects a wall
     // Using function from https://stackoverflow.com/a/1084899
     // Code adapted and reused from P1 shell collision detection
     boolean line_intersects(PVector E, PVector L, PVector C, float r) {
-        r = 0.25;
+      
+      r = 0.25;
         PVector d = PVector.sub(L, E);
         PVector f = PVector.sub(E, C);
         float a = d.dot(d);
@@ -141,17 +151,22 @@ public class Entity {
         PVector tl = new PVector(wall_coords[0] - 0.5, wall_coords[1] + 0.5);
         PVector tr = new PVector(wall_coords[0] + 0.5, wall_coords[1] + 0.5);
 
-        return wallContainsPoint(wall_coords, location) 
-        ||  line_intersects(bl, br, location, interact_radius)
-        ||  line_intersects(br, tr, location, interact_radius)
-        ||  line_intersects(tr, tl, location, interact_radius)
-        ||  line_intersects(bl, tl, location, interact_radius);
+      boolean intersects = wallContainsPoint(wall_coords, location) 
+        || line_intersects(bl, br, location, interact_radius)
+        || line_intersects(br, tr, location, interact_radius)
+        || line_intersects(tr, tl, location, interact_radius)
+        || line_intersects(bl, tl, location, interact_radius);
+    System.out.println("Wall collision detected: " + intersects);
+    return intersects;
     }
 
     // Handle collisions after updating entity location
     // Separated moving the entity, and handling collisions to allow for monsters which can walk through walls
     void handleWallCollisions(int[][] level_tile_map) {
-        // Check for any walls the character is penetrating, then resolve penetration by moving them back along the direction of travel
+    System.out.println("Handling wall collisions");
+
+      
+      // Check for any walls the character is penetrating, then resolve penetration by moving them back along the direction of travel
         // The character's location, rounded to the nearest integer corresponds to the current tile.
         int[] closest_tile = this.getTileLocation();
         // Check each of the tiles adjacent to the closest tile for walls and penetration
@@ -159,7 +174,8 @@ public class Entity {
             if (x >= 0 && x < level_tile_map.length) {
                 for (int y = closest_tile[1] - 1; y <= closest_tile[1] + 1; y ++) {
                     if (y >= 0 && y < level_tile_map[x].length) {
-                        // If the tile is blocked
+                    
+                      // If the tile is blocked
                         if (level_tile_map[x][y] != 1 && level_tile_map[x][y] != 3) {
                             // Ignore diagonal tiles, these shouldn't be necessary
                             if (closest_tile[0] == x || closest_tile[1] == y) {
@@ -174,6 +190,9 @@ public class Entity {
                                             offset = -1 * (interact_radius - (y - location.y - 0.5));
                                             // Avoid 'sticky' behaviour by zeroing out the offset if it is pulling towards the wall
                                             offset = (offset > 0) ? 0 : offset;
+                                                System.out.println("Adjusting y position: " + offset);
+
+                                            
                                         } else {
                                             offset = (interact_radius - (location.y - y - 0.5));
                                             offset = (offset < 0) ? 0 : offset;
@@ -189,6 +208,8 @@ public class Entity {
                                             offset = (offset < 0) ? 0 : offset;
                                         }
                                         location.add(offset,  0);
+                                           System.out.println("Adjusting x position: " + offset);
+ 
                                     }
                                 }
                             }
@@ -202,13 +223,14 @@ public class Entity {
  
 
     public void drawComponent(int tile_size) {
+ 
         float entity_x = tile_size * location.x;
         float entity_y = tile_size * location.y;
         pushMatrix();
         translate(entity_x + tile_size/2, entity_y + tile_size/2);
         //rotate(orientation);
         if (entity_image != null) {
-            image(entity_image, -tile_size/2, -tile_size/2, tile_size , tile_size);
+           image(entity_image, -tile_size/2, -tile_size/2, tile_size , tile_size);
         } else {
             // Default to a black circle in case of no image
             fill(0);
