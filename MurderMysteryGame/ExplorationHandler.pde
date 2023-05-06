@@ -17,7 +17,7 @@ final class ExplorationHandler {
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
     private float search_cooldown;
- PImage tile1a = loadImage("tile1a.png");
+    PImage tile1a;
 
     // The size of each tile
     private int tile_size;
@@ -30,6 +30,8 @@ final class ExplorationHandler {
     this.rand = rand;
     // Initialise the character cast
     cast = new CharacterCast(rand);
+    tile1a = loadImage("tile1a.png");
+    tile1a.resize(tile_size, tile_size);
     
     // Generate the plot
     plot_gen = new PlotGenerator(cast, rand);
@@ -108,6 +110,7 @@ for (int y = 0; y < map_height; y++) {
         // Handle character Movement
         player.handleInput(input_array, frame_duration);
         // TODO Handle character collisions
+        player.handleWallCollisions(tile_map);
 
         // Check if the player is trying to interact with an item
         // Impose a cooldown because the player doesn't need to search the same place several times
@@ -148,7 +151,8 @@ for (int y = 0; y < map_height; y++) {
   background(255);
   pushMatrix();
   PVector player_location = player.getLocation();
-  translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);
+   //translate((displayWidth/2) - tile_size * player_location.x, (displayHeight/2) - tile_size * player_location.y);
+
 
   for (int y = 0; y < tile_map.length; y++) {
     for (int x = 0; x < tile_map[0].length; x++) {
@@ -159,7 +163,8 @@ for (int y = 0; y < map_height; y++) {
       } 
       else if (tile_map[y][x] == 1) {
        
-                image(tile1a, x * tile_size, y * tile_size, tile_size, tile_size);
+                //image(tile1a, x * tile_size, y * tile_size, tile_size, tile_size);
+      image(tile1a, x * tile_size, y * tile_size);
 
       } else {
         fill(0);

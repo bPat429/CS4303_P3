@@ -17,7 +17,7 @@ final class Player extends Entity {
     private int _orientation = 1; // 1 for right, -1 for left, 0 for up
 
     Player() {
-        super(0, 0, "player");
+        super(2, 1, "player");
         
         _right_images = new ArrayList<PImage>();
         _left_images = new ArrayList<PImage>();
