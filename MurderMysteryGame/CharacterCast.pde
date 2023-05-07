@@ -1,12 +1,12 @@
 import java.util.ArrayList;
-// The NPC objects defining each character
+// The Character objects defining each character
 // Add new characters here
 
 final class CharacterCast {
-    private ArrayList<NPC> cast;
+    private ArrayList<Character> cast;
 
     CharacterCast(Random rand) {
-        cast = new ArrayList<NPC>();
+        cast = new ArrayList<Character>();
         // n.b. The character's job in the house:
         // 0 = butler
         // 1 = maid
@@ -15,20 +15,20 @@ final class CharacterCast {
         // 4 = guest
 
         // Add John the Butler
-        cast.add(new NPC("John", 0, rand, johnButlerDialogue()));   
+        cast.add(new Character("John", 0, rand, johnButlerDialogue()));   
 
         // Add Andrew the Maid
-        cast.add(new NPC("Andrew", 1, rand, andrewMaidDialogue()));   
+        cast.add(new Character("Andrew", 1, rand, andrewMaidDialogue()));   
 
         // Add Elisa the Lady of the house
-        cast.add(new NPC("Elisa", 2, rand, elisaOwnerDialogue()));
+        cast.add(new Character("Elisa", 2, rand, elisaOwnerDialogue()));
     }
 
-    public ArrayList<NPC> getCast() {
+    public ArrayList<Character> getCast() {
         return cast;
     }
 
-    public NPC getCharacter(int i) {
+    public Character getCharacter(int i) {
         return cast.get(i);
     }
 

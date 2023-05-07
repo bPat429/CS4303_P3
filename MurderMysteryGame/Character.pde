@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 // Class for Non player characters
 // N.b. if we want to implement roaming we'll have to change this to extend Entity, not Interactable
-class NPC extends Entity {
+class Character extends Entity {
     // keep a copy of rand so we can randomly choose between dialogue options etc.
     Random rand;
     private ArrayList<String> dialogue;
@@ -21,9 +21,9 @@ class NPC extends Entity {
     int job;
 // TEST COMMENT DELETE THIS
 
-    // Create an NPC
+    // Create an Character
     // Automatically set position to (0, 0) before moving them to their required position after generating the plot
-    NPC(String name, int job, Random rand, ArrayList<String> dialogue) {
+    Character(String name, int job, Random rand, ArrayList<String> dialogue) {
         super(0, 0, name);
         this.dialogue = dialogue;
         super.entity_image = loadImage("NPC_placeholder.png");

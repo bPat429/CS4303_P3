@@ -6,24 +6,17 @@ import org.sat4j.core.*;
 class PlotGenerator {
     private ArrayList<Interactable> interactables;
     private CharacterCast cast;
+    private Character murderer;
+    private Character victim;
     private Random rand;
 
     PlotGenerator(CharacterCast cast, Random rand) {
         interactables = new ArrayList<Interactable>();
-
-        // Randomly select a murderer from the cast
-        NPC murderer = cast.getCharacter(rand.nextInt(cast.len()));
-        boolean victim_chosen = false;
-        NPC victim = null;
-        // TODO include the possibility of suicide
-        while (!victim_chosen) {
-            // Randomly select a victim from the cast, avoid choosing the murderer
-            victim = cast.getCharacter(rand.nextInt(cast.len()));
-            victim_chosen = (victim != murderer);
-        }
+        
+        SatFileWriter sat_writer = new SatFileWriter(cast, rand);
 
         // TODO Plug the cast into SAT and generate a murder mystery
-        runSolver();
+        // runSolver();
 
         // TODO get rid of this filler method
 
@@ -35,7 +28,7 @@ class PlotGenerator {
         murderer.setRole(1);
         victim = cast.getCharacter(1);
         victim.setRole(2);
-        NPC bystander = cast.getCharacter(2);
+        Character bystander = cast.getCharacter(2);
         bystander.addDialogue("John hated Alistar, they argued frequently");
         
         for (int i = 0; i < cast.len(); i++) {
