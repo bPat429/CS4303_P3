@@ -1,5 +1,6 @@
 import java.util.Random;
 import java.util.ArrayList;
+import org.sat4j.core.*;
 
 // Class used for handling plot generation, and the creation of interactables required for the plot
 class PlotGenerator {
@@ -22,6 +23,7 @@ class PlotGenerator {
         }
 
         // TODO Plug the cast into SAT and generate a murder mystery
+        runSolver();
 
         // TODO get rid of this filler method
 
@@ -41,7 +43,6 @@ class PlotGenerator {
             cast.getCharacter(i).setPosition(i + 1, i + 2);
         }
 
-
         ClueObjects clues = new ClueObjects(rand, new boolean[]{true});
         
         // TODO handle physical clues
@@ -51,8 +52,29 @@ class PlotGenerator {
             interactables.add(clues.getClue(i));
         }
     }
-    
+
     ArrayList<Interactable> getInteractables() {
       return interactables;
+    }
+
+    void runSolver() {
+        ISolver solver = SolverFactory.newDefault();
+        solver.setTimeout(10); // 10 second timeout
+        Reader reader = new DimacsReader(solver);
+        PrintWriter out = new PrintWriter(System.out,true);
+        // CNF filename is given on the command line 
+        try {
+            String filename = sketchPath() + "/data/sat/SatProblem.txt";
+            System.out.println(sketchPath());
+            IProblem problem = reader.parseInstance(filename);
+            if (problem.isSatisfiable()) {
+                System.out.println("Satisfiable !");
+                reader.decode(problem.model(),out);
+            } else {
+                System.out.println("Unsatisfiable !");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

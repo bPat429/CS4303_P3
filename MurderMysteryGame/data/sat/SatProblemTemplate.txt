@@ -1,0 +1,5 @@
+c
+c The Problem describing the plan needed for the murder mystery story
+c Murderer = [0, ..., NUM_CHARACTERS - 1]. Murderer = character index
+c Weapon = [NUM_CHARACTERS, ..., NUM_Weapons - 1]. Weapon = clue index - NUM_CHARACTERS
+p cnf 
