@@ -156,14 +156,12 @@ public class Entity {
         || line_intersects(br, tr, location, interact_radius)
         || line_intersects(tr, tl, location, interact_radius)
         || line_intersects(bl, tl, location, interact_radius);
-    System.out.println("Wall collision detected: " + intersects);
     return intersects;
     }
 
     // Handle collisions after updating entity location
     // Separated moving the entity, and handling collisions to allow for monsters which can walk through walls
     void handleWallCollisions(int[][] level_tile_map) {
-    System.out.println("Handling wall collisions");
 
       
       // Check for any walls the character is penetrating, then resolve penetration by moving them back along the direction of travel

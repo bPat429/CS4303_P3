@@ -1,27 +1,22 @@
 import java.util.Random;
 import java.util.ArrayList;
+import org.sat4j.core.*;
 
 // Class used for handling plot generation, and the creation of interactables required for the plot
 class PlotGenerator {
     private ArrayList<Interactable> interactables;
     private CharacterCast cast;
+    private Character murderer;
+    private Character victim;
     private Random rand;
 
     PlotGenerator(CharacterCast cast, Random rand) {
         interactables = new ArrayList<Interactable>();
-
-        // Randomly select a murderer from the cast
-        NPC murderer = cast.getCharacter(rand.nextInt(cast.len()));
-        boolean victim_chosen = false;
-        NPC victim = null;
-        // TODO include the possibility of suicide
-        while (!victim_chosen) {
-            // Randomly select a victim from the cast, avoid choosing the murderer
-            victim = cast.getCharacter(rand.nextInt(cast.len()));
-            victim_chosen = (victim != murderer);
-        }
+        
+        SatFileWriter sat_writer = new SatFileWriter(cast, rand);
 
         // TODO Plug the cast into SAT and generate a murder mystery
+        // runSolver();
 
         // TODO get rid of this filler method
 
@@ -33,14 +28,13 @@ class PlotGenerator {
         murderer.setRole(1);
         victim = cast.getCharacter(1);
         victim.setRole(2);
-        NPC bystander = cast.getCharacter(2);
+        Character bystander = cast.getCharacter(2);
         bystander.addDialogue("John hated Alistar, they argued frequently");
         
         for (int i = 0; i < cast.len(); i++) {
             // TODO properly place characters
             cast.getCharacter(i).setPosition(i + 1, i + 2);
         }
-
 
         ClueObjects clues = new ClueObjects(rand, new boolean[]{true});
         
@@ -51,8 +45,29 @@ class PlotGenerator {
             interactables.add(clues.getClue(i));
         }
     }
-    
+
     ArrayList<Interactable> getInteractables() {
       return interactables;
+    }
+
+    void runSolver() {
+        ISolver solver = SolverFactory.newDefault();
+        solver.setTimeout(10); // 10 second timeout
+        Reader reader = new DimacsReader(solver);
+        PrintWriter out = new PrintWriter(System.out,true);
+        // CNF filename is given on the command line 
+        try {
+            String filename = sketchPath() + "/data/sat/SatProblem.txt";
+            System.out.println(sketchPath());
+            IProblem problem = reader.parseInstance(filename);
+            if (problem.isSatisfiable()) {
+                System.out.println("Satisfiable !");
+                reader.decode(problem.model(),out);
+            } else {
+                System.out.println("Unsatisfiable !");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
