@@ -1,32 +1,33 @@
 import java.io.File;
+import java.lang.Math;
 
 // Class used to handle writing the SAT file
 class SatFileWriter {
-    private ArrayList<Interactable> interactables;
     private ArrayList<String> sat_clauses;
     private CharacterCast cast;
+    private WeaponObjects weapons;
     private Random rand;
     private String satFilePath;
     private PrintWriter sat_file;
     private int n;
     private int m;
 
-    SatFileWriter(CharacterCast cast, Random rand) {
-        interactables = new ArrayList<Interactable>();
+    SatFileWriter(CharacterCast cast, WeaponObjects weapons, Random rand) {
+        this.cast = cast;
+        this.weapons = weapons;
         // Find n and m
         n = cast.len();
-        m = interactables.size();
-
+        m = weapons.len();
         // Randomly select a murderer from the cast
-        // Do this outside of SAT for convenience
-        Character murderer = cast.getCharacter(rand.nextInt(cast.len()));
+        // Do this outside of SAT for convenience and to avoid higher probabilities for murderers and victims which
+        // are more likely (TODO mention this in the report)
+        int murderer_index = rand.nextInt(cast.len());
         boolean victim_chosen = false;
-        Character victim = null;
-        // TODO include the possibility of suicide ?
+        int victim_index = -1;
         while (!victim_chosen) {
             // Randomly select a victim from the cast, avoid choosing the murderer
-            victim = cast.getCharacter(rand.nextInt(cast.len()));
-            victim_chosen = (victim != murderer);
+            victim_index = rand.nextInt(cast.len());
+            victim_chosen = (victim_index != murderer_index);
         }
 
         satFilePath = sketchPath() + "/data/sat/SatProblem.txt";
@@ -37,7 +38,7 @@ class SatFileWriter {
         // Use one line for each fluent
         int fluents_needed = countFluentsNeeded();
         sat_clauses = new ArrayList<String>();
-        generateClauses();
+        generateClauses(murderer_index, victim_index);
         writeSatFile(sat_file);
 
         sat_file.flush();
@@ -74,7 +75,7 @@ class SatFileWriter {
         // 6. Murderer(a): Character (a) is the murderer. This role is pre-chosen. Count = n
         // 7. Victim(a): Character (a) is the victim. This role is pre-chosen. Count = n
         // 8. Bystander(a): Character (a) is neither Murderer nor Victim. This role is pre-chosen. Count = n
-        int character_fluent_count = n^2 + n + n*m + n + 1 + n + n + n;
+        int character_fluent_count = (int) Math.pow(n, 2) + n + n*m + n + 1 + n + n + n;
 
         // Counting fluents needed for each weapon:
         // 1. has_used_weapon(a): Character (a) is the murderer and has used exactly one weapon. Count = 1 because we know the murderer
@@ -88,17 +89,14 @@ class SatFileWriter {
         sat_clauses.add(clause + " 0");
     }
 
-    void generateClauses() {
+    void generateClauses(int murderer_index, int victim_index) {
         generateAlibiClauses();
         generateHasAlibiClauses();
-        generateHasMurderedClauses();
-        generateIsMurdererClauses(); // TODO
-        generateIsVictimClauses(); // TODO
-        generateIsBystanderClauses(); // TODO
+        generateHasMurderedClauses(murderer_index, victim_index);
+        generateIsMurdererClauses(murderer_index); // TODO
+        generateIsVictimClauses(victim_index); // TODO
+        generateIsBystanderClauses(murderer_index, victim_index); // TODO
         generateHasUsedWeaponClauses();
-
-
-
     }
 
     // Generate all alibi clauses for each character
@@ -136,32 +134,25 @@ class SatFileWriter {
         // If Character a has an alibi then they have an alibi with at least one other person
         for (int a = 0; a < n; a++) {
             int has_alibi_a = getHasAlibiFluent(a);
-            String clause = "";
+            String clause = "-" + has_alibi_a;
             for (int b = 0; b < n; b++) {
                 if (a != b) {
                     int alibi = getAlibiFluent(a, b);
-                    if (b == 0 || (a == 0 && b == 1)) {
-                        clause = clause + alibi;
-                    } else {
-                        clause = clause + " " + alibi;
-                    }
+                    clause = clause + " " + alibi;
                 }
             }
             addClause(clause);
         }
     }
 
-    // No clauses required for 'has_access'. TODO consider adding character job based restrictions.
+    // No clauses required for 'has_access'. Who has access is automatically generated. TODO consider adding restrictions based on jobs
 
     // No clauses required for 'has_motive'.
 
     // Generate all has_murdered clauses
-    void generateHasMurderedClauses() {
+    void generateHasMurderedClauses(int murderer_index, int victim_index) {
         // If character a murders b then a and b both don't have an alibi, a has a motive and the weapon c has been used
         // We already know the identity of the murderer and victim, so only generate the clauses for them.
-        // TODO
-        int murderer_index = -1;
-        int victim_index = -1;
         int murdered_a_b = getHasMurderedFluent();
         int has_alibi_a = getHasAlibiFluent(murderer_index);
         int has_alibi_b = getHasAlibiFluent(victim_index);
@@ -172,15 +163,13 @@ class SatFileWriter {
         addClause(clause);
         clause = "-" + murdered_a_b + " " + has_used_weapon;
         addClause(clause);
-        // Manualoly assert that this is always true
+        // Manually assert that this is always true
         clause = Integer.toString(murdered_a_b);
         addClause(clause);
     }
 
     // Generate all is_murderer clauses
-    void generateIsMurdererClauses() {
-        // Set which character is the murderer
-        int murderer_index = -1;
+    void generateIsMurdererClauses(int murderer_index) {
         String clause;
         for (int a = 0; a < n; a++) {
             int murderer_a = getIsMurdererFluent(a);
@@ -194,9 +183,7 @@ class SatFileWriter {
     }
 
     // Generate all is_victim clauses
-    void generateIsVictimClauses() {
-        // Set which character is the victim
-        int victim_index = -1;
+    void generateIsVictimClauses(int victim_index) {
         String clause;
         for (int a = 0; a < n; a++) {
             int victim_a = getIsVictimFluent(a);
@@ -210,11 +197,9 @@ class SatFileWriter {
     }
 
     // Generate all is_bystander clauses
-    void generateIsBystanderClauses() {
+    void generateIsBystanderClauses(int murderer_index, int victim_index) {
         // Set which characters are bystanders
         // Assert that if character a is a bystander then they do not have all of: no alibi, access to the murder weapon, motive
-        int murderer_index = -1;
-        int victim_index = -1;
         String clause;
         for (int a = 0; a < n; a++) {
             int bystander_a = getIsBystanderFluent(a);
@@ -222,21 +207,21 @@ class SatFileWriter {
             int motive_a = getHasMotiveFluent(a);
             if (a == victim_index || a == murderer_index) {
                 clause = "-" + bystander_a;
+                addClause(clause);
             } else {
                 clause = Integer.toString(bystander_a);
-            }
-            addClause(clause);
-            // TODO murder_weapon_access_a
-            for (int c = 0; c < m; c++) {
-                int has_access_a_c = getHasAccessFluent(a, c);
-                int weapon_used_c = getWeaponUsedFluent(c);
-                clause = "-" + bystander_a + " " + alibi_a + " -" + motive_a + " -" + has_access_a_c + " -" + weapon_used_c;
                 addClause(clause);
+                for (int c = 0; c < m; c++) {
+                    int has_access_a_c = getHasAccessFluent(a, c);
+                    int weapon_used_c = getWeaponUsedFluent(c);
+                    clause = "-" + bystander_a + " " + alibi_a + " -" + motive_a + " -" + has_access_a_c + " -" + weapon_used_c;
+                    addClause(clause);
+                }
             }
         }
     }
 
-    // No clauses needed for weapon_used fluents
+    // No clauses needed for weapon_used fluents, these are included in generateHasUsedWeaponClauses
 
     // Generate all has_used_weapon clauses
     void generateHasUsedWeaponClauses() {
@@ -254,7 +239,7 @@ class SatFileWriter {
         // Assert that at most one weapon is used
         for (int c = 0; c < m; c++) {
             int weapon_used_c = getWeaponUsedFluent(c);
-            for (int d = 0; d < m; d++) {
+            for (int d = c; d < m; d++) {
                 if (c != d) {
                     int weapon_used_d = getWeaponUsedFluent(d);
                     clause = "-" + weapon_used_c + " -" + weapon_used_d;
@@ -278,63 +263,66 @@ class SatFileWriter {
     // Has_Alibi is listed second
     // Offset after this = (n ^ 2) + n
     int getHasAlibiFluent(int char_a_index) {
-        int offset = (n^2) + 1;
+        int offset = (int) Math.pow(n, 2) + 1;
+        System.out.println("a = " + (char_a_index));
+        System.out.println("n = " + (offset));
+        System.out.println("n = " + (offset + char_a_index));
         return offset + char_a_index;
     }
 
     // Has_Access is listed third
     // Offset after this = (n ^ 2) + n + (n * m)
     int getHasAccessFluent(int char_a_index, int weapon_c_index) {
-        int offset = ((n ^ 2) + n) + 1;
+        int offset = ((int) Math.pow(n, 2) + n) + 1;
         return offset + weapon_c_index + char_a_index * m;
     }
 
     // Has_Motive is listed fourth
     // Offset after this = (n ^ 2) + 2*n + (n * m)
     int getHasMotiveFluent(int char_a_index) {
-        int offset = (n ^ 2) + n + (n * m) + 1;
+        int offset = (int) Math.pow(n, 2) + n + (n * m) + 1;
         return offset + char_a_index;
     }
 
     // Is_Murderer is listed fifth
     // Offset after this = (n^2) + 2*n + (n*m) + 1
     int getHasMurderedFluent() {
-        int offset = (n ^ 2) + 2*n + (n * m) + 1;
+        int offset = (int) Math.pow(n, 2) + 2*n + (n * m) + 1;
         return offset + 1;
     }
 
     // Is_Murderer is listed sixth
     // Offset after this = (n^2) + 3*n + (n*m) + 1
     int getIsMurdererFluent(int char_a_index) {
-        int offset = (n^2) + 2*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 2*n + (n*m) + 1;
         return offset + char_a_index;
     }
 
     // Is_Victim is listed seventh
     // Offset after this = (n^2) + 4*n + (n*m) + 1
     int getIsVictimFluent(int char_a_index) {
-        int offset = (n^2) + 3*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 3*n + (n*m) + 1;
         return offset + char_a_index;
     }
 
     // Is_Bystander is listed eigth
     // Offset after this = (n^2) + 5*n + (n*m) + 1
     int getIsBystanderFluent(int char_a_index) {
-        int offset = (n^2) + 4*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 4*n + (n*m) + 1;
         return offset + char_a_index;
     }
 
     // Has_Used_Weapon is listed ninth
     // Offset after this = (n^2) + 5*n + (n*m) + 2
     int getHasUsedWeaponFluent() {
-        int offset = (n^2) + 5*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 1;
         return offset + 1;
     }
 
     // Weapon_Used is listed tenth
     // Offset after this = (n^2) + 5*n + (n*m) + 2 + m
     int getWeaponUsedFluent(int weapon_c_index) {
-        int offset = (n^2) + 5*n + (n*m) + 1 + 1;
+        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 1 + 1;
         return offset + weapon_c_index;
     }
 }

@@ -3,8 +3,9 @@ class Interactable {
   // The tile on which this is placed
   private int[] location;
   // Type of the interactable
-  // 0 = physical clue
-  // 1 = exit door
+  // 0 = clue
+  // 1 = weapon
+  // 2 = exit door
   private int type;
   private PImage interactable_image;
   // Radius used to tune how far the player may be and still interact

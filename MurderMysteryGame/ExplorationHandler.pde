@@ -2,8 +2,6 @@ import java.util.Random;
 import java.util.ArrayList;
 
 final class ExplorationHandler {
-    // The class used for handling the cast of the murder mystery
-    CharacterCast cast;
     // The class used for generating a plot for the murder mystery
     PlotGenerator plot_gen;
     // An array representing the contents of each tile in the manor.
@@ -13,6 +11,10 @@ final class ExplorationHandler {
     // 3 = interactable space
     private int[][] tile_map;
     private Player player;
+    private ClueObjects clues;
+    // The class used for handling the cast of the murder mystery
+    private CharacterCast cast;
+    private WeaponObjects weapons;
     private ArrayList<Interactable> interactables;
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
@@ -29,16 +31,17 @@ final class ExplorationHandler {
     this.tile_size = tile_size;
     this.rand = rand;
     // Initialise the character cast
-    cast = new CharacterCast(rand);
     tile1a = loadImage("tile1a.png");
     tile1a.resize(tile_size, tile_size);
     
     // Generate the plot
-    plot_gen = new PlotGenerator(cast, rand);
+    plot_gen = new PlotGenerator(rand);
+    cast = plot_gen.getCast();
+    weapons = plot_gen.getWeapons();
 
     // Add physical clues
-    interactables = plot_gen.getInteractables();
-
+    clues = plot_gen.getClues();
+    interactables = new ArrayList<Interactable>();
     // Spawn in exit door for game over
     interactables.add(new FrontDoor(3, 1));
     
@@ -52,28 +55,28 @@ final class ExplorationHandler {
 
     // Generate the dungeon level
     void generateMansion() {
- 
-       String[] tilemap_lines = loadStrings("data/txt/Tilemap.txt");
-   int map_height = tilemap_lines.length;
-  int map_width = tilemap_lines[0].length();
+  
+      String[] tilemap_lines = loadStrings("data/txt/Tilemap.txt");
+      int map_height = tilemap_lines.length;
+      int map_width = tilemap_lines[0].length();
 
-  // create the tile map
-  tile_map = new int[map_height][map_width];
+      // create the tile map
+      tile_map = new int[map_height][map_width];
 
-  // read the tile map from the text file
-for (int y = 0; y < map_height; y++) {
-    String line = tilemap_lines[y];
-    System.out.println("line=" + line);
-    for (int x = 0; x < map_width; x++) {
-        char tile_char = line.charAt(x);
-        if (tile_char == '0') {
-            tile_map[y][x] = 0; // floor
-        } else if (tile_char == '1') {
-            tile_map[y][x] = 1; // wall
-        }
+      // read the tile map from the text file
+      for (int y = 0; y < map_height; y++) {
+          String line = tilemap_lines[y];
+          System.out.println("line=" + line);
+          for (int x = 0; x < map_width; x++) {
+              char tile_char = line.charAt(x);
+              if (tile_char == '0') {
+                  tile_map[y][x] = 0; // floor
+              } else if (tile_char == '1') {
+                  tile_map[y][x] = 1; // wall
+              }
+          }
+      }
     }
-}
-}
         
         
          

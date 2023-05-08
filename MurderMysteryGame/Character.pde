@@ -1,5 +1,7 @@
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 // Class for Non player characters
 // N.b. if we want to implement roaming we'll have to change this to extend Entity, not Interactable
@@ -7,6 +9,8 @@ class Character extends Entity {
     // keep a copy of rand so we can randomly choose between dialogue options etc.
     Random rand;
     private ArrayList<String> dialogue;
+    // Set of indexes for weapons this character has access to
+    private Set<Integer> accessable_weapons;
     // The character's assigned role, e.g.
     // 0 = bystander
     // 1 = murderer
@@ -19,7 +23,6 @@ class Character extends Entity {
     // 3 = chef
     // 4 = guest
     int job;
-// TEST COMMENT DELETE THIS
 
     // Create an Character
     // Automatically set position to (0, 0) before moving them to their required position after generating the plot
@@ -29,6 +32,7 @@ class Character extends Entity {
         super.entity_image = loadImage("NPC_placeholder.png");
         this.job = job;
         this.rand = rand;
+        this.accessable_weapons = new HashSet<Integer>();
         // Set role to bystander by default
         role = 0;
     }
@@ -70,5 +74,13 @@ class Character extends Entity {
 
     void setPosition(int x_pos, int y_pos) {
         super.setLocation(x_pos, y_pos);
+    }
+
+    void addWeaponAccess(Integer weapon_index) {
+        accessable_weapons.add(weapon_index);
+    }
+
+    boolean checkWeaponAccess(Integer weapon_index) {
+        return accessable_weapons.contains(weapon_index);
     }
 }

@@ -4,16 +4,20 @@ import org.sat4j.core.*;
 
 // Class used for handling plot generation, and the creation of interactables required for the plot
 class PlotGenerator {
-    private ArrayList<Interactable> interactables;
     private CharacterCast cast;
+    private WeaponObjects weapons;
+    private ClueObjects clues;
     private Character murderer;
     private Character victim;
     private Random rand;
 
-    PlotGenerator(CharacterCast cast, Random rand) {
-        interactables = new ArrayList<Interactable>();
+    PlotGenerator(Random rand) {
+        // Initialise all cast, weapons and clues
+        cast = new CharacterCast(rand);
+        weapons = new WeaponObjects(rand);
+        clues = new ClueObjects(rand);
         
-        SatFileWriter sat_writer = new SatFileWriter(cast, rand);
+        SatFileWriter sat_writer = new SatFileWriter(cast, weapons, rand);
 
         // TODO Plug the cast into SAT and generate a murder mystery
         // runSolver();
@@ -22,32 +26,39 @@ class PlotGenerator {
 
         // Apply changes to the cast of characters according to the generated plan
         // TODO stop this from being hard-coded
-        int murderer_index = 0;
-        int victim_index = 1;
-        murderer = cast.getCharacter(0);
-        murderer.setRole(1);
-        victim = cast.getCharacter(1);
-        victim.setRole(2);
-        Character bystander = cast.getCharacter(2);
-        bystander.addDialogue("John hated Alistar, they argued frequently");
         
-        for (int i = 0; i < cast.len(); i++) {
-            // TODO properly place characters
-            cast.getCharacter(i).setPosition(i + 1, i + 2);
-        }
-
-        ClueObjects clues = new ClueObjects(rand, new boolean[]{true});
+        // int murderer_index = 0;
+        // int victim_index = 1;
+        // murderer = cast.getCharacter(0);
+        // murderer.setRole(1);
+        // victim = cast.getCharacter(1);
+        // victim.setRole(2);
+        // Character bystander = cast.getCharacter(2);
+        // bystander.addDialogue("John hated Alistar, they argued frequently");
         
-        // TODO handle physical clues
-        for (int i = 0; i < clues.len(); i++) {
-            // TODO properly place clues in the mansion
-            clues.getClue(i).setPosition(-i - 1, -i - 2);
-            interactables.add(clues.getClue(i));
-        }
+        // for (int i = 0; i < cast.len(); i++) {
+        //     // TODO properly place characters
+        //     cast.getCharacter(i).setPosition(i + 1, i + 2);
+        // }
+        
+        // // TODO handle physical clues
+        // for (int i = 0; i < clues.len(); i++) {
+        //     // TODO properly place clues in the mansion
+        //     clues.getClue(i).setPosition(-i - 1, -i - 2);
+        //     interactables.add(clues.getClue(i));
+        // }
     }
 
-    ArrayList<Interactable> getInteractables() {
-      return interactables;
+    CharacterCast getCast() {
+      return cast;
+    }
+
+    WeaponObjects getWeapons() {
+      return weapons;
+    }
+
+    ClueObjects getClues() {
+      return clues;
     }
 
     void runSolver() {
