@@ -40,7 +40,7 @@ final class ExplorationHandler {
     interactables = plot_gen.getInteractables();
 
     // Spawn in exit door for game over
-    interactables.add(new FrontDoor(1, 1));
+    interactables.add(new FrontDoor(3, 1));
     
     generateMansion(); // call the method to generate the mansion/tile map
     this.search_cooldown = millis();
@@ -159,12 +159,12 @@ for (int y = 0; y < map_height; y++) {
       if (tile_map[y][x] == 0) {
         // Show tile1a image for unpopulated spaces
  fill(128);
-        rect(x * tile_size, y * tile_size, tile_size, tile_size);     
+        rect(y * tile_size, x * tile_size, tile_size, tile_size);     
       } 
       else if (tile_map[y][x] == 1) {
        
                 //image(tile1a, x * tile_size, y * tile_size, tile_size, tile_size);
-      image(tile1a, x * tile_size, y * tile_size);
+      image(tile1a, y * tile_size, x * tile_size);
 
       } else {
         fill(0);
