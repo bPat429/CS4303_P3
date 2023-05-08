@@ -1,7 +1,5 @@
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
 
 // Class for Non player characters
 // N.b. if we want to implement roaming we'll have to change this to extend Entity, not Interactable
@@ -9,8 +7,10 @@ class Character extends Entity {
     // keep a copy of rand so we can randomly choose between dialogue options etc.
     Random rand;
     private ArrayList<String> dialogue;
+    private ArrayList<Character> alibi_list;
     // Set of indexes for weapons this character has access to
-    private Set<Integer> accessable_weapons;
+    private ArrayList<ClueObject> accessable_weapons;
+    private boolean has_motive;
     // The character's assigned role, e.g.
     // 0 = bystander
     // 1 = murderer
@@ -32,7 +32,8 @@ class Character extends Entity {
         super.entity_image = loadImage("NPC_placeholder.png");
         this.job = job;
         this.rand = rand;
-        this.accessable_weapons = new HashSet<Integer>();
+        this.accessable_weapons = new ArrayList<ClueObject>();
+        this.alibi_list = new ArrayList<Character>();
         // Set role to bystander by default
         role = 0;
     }
@@ -76,11 +77,31 @@ class Character extends Entity {
         super.setLocation(x_pos, y_pos);
     }
 
-    void addWeaponAccess(Integer weapon_index) {
-        accessable_weapons.add(weapon_index);
+    boolean hasAlibi() {
+        return (this.alibi_list.size() > 0);
     }
 
-    boolean checkWeaponAccess(Integer weapon_index) {
-        return accessable_weapons.contains(weapon_index);
+    ArrayList<Character> getAlibis() {
+        return this.alibi_list;
+    }
+
+    void addAlibi(Character other_char) {
+        this.alibi_list.add(other_char);
+    }
+
+    void addWeaponAccess(ClueObject weapon) {
+        accessable_weapons.add(weapon);
+    }
+
+    boolean checkWeaponAccess(ClueObject weapon) {
+        return accessable_weapons.contains(weapon);
+    }
+
+    void setHasMotive(boolean has_motive) {
+        this.has_motive = has_motive;
+    }
+
+    boolean hasMotive() {
+        return this.has_motive;
     }
 }
