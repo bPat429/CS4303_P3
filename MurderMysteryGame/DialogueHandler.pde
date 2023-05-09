@@ -38,11 +38,11 @@ final class DialogueHandler {
         if ((millis() - input_cooldown) > 400) {
             input_cooldown = millis();
             
-            if (input_array[0]) {
+            if (input_array[2]) {
                 current_selection = (current_selection == 0) ? current_selection : current_selection - 1;
             }
 
-            if (input_array[1]) {
+            if (input_array[3]) {
                 current_selection = (current_selection == 4) ? current_selection : current_selection + 1;
             }
             // TODO replace these with wasdf

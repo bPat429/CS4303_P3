@@ -42,25 +42,25 @@ void enterExplorationScreen() {
 void draw() { 
     switch (current_screen) {
         case -1:
-          image(backgroundImage, 0, 0);
-          textAlign(LEFT);
-          textSize(32);
-          fill(0);
-          text("Instructions:", 20, 40);
-          stroke(0);
-          strokeWeight(2);
-          line(20, 50, 200, 50);
-          textSize(25);
-          text("Use the following keys to move the player:", 20, 80); // add spacing here
-          textSize(20);
-          text("'a' to move left", 40, 110); // add spacing here
-          text("'s' to move down", 40, 140); // add spacing here
-          text("'w' to move up", 40, 170); // add spacing here
-          text("'e' to move right", 40, 200); // add spacing here
-          
-          textSize(25);
-          text("Press 's' to start the game.", 20, 250); // add spacing here
-          text("Press 'f' to interact with objects and characters.", 20, 280); // add spacing here
+            image(backgroundImage, 0, 0);
+            textAlign(LEFT);
+            textSize(32);
+            fill(0);
+            text("Instructions:", 20, 40);
+            stroke(0);
+            strokeWeight(2);
+            line(20, 50, 200, 50);
+            textSize(25);
+            text("Use the following keys to move the player:", 20, 80); // add spacing here
+            textSize(20);
+            text("'a' to move left", 40, 110); // add spacing here
+            text("'s' to move down", 40, 140); // add spacing here
+            text("'w' to move up", 40, 170); // add spacing here
+            text("'e' to move right", 40, 200); // add spacing here
+            
+            textSize(25);
+            text("Press 's' to start the game.", 20, 250); // add spacing here
+            text("Press 'f' to interact with objects and characters.", 20, 280); // add spacing here
             // Intro screen
             // TODO
             if (input_array[5]) {
@@ -108,12 +108,12 @@ void keyPressed() {
     if (key == 's' || key == 'S') {
         input_array[3] = true;
     }
-  if (key == 'f' || key == 'F') {
-    input_array[4] = true;
-  }
-  if (key == 's' || key == 'S') {
-    input_array[5] = true;
-  }
+    if (key == 'f' || key == 'F') {
+        input_array[4] = true;
+    }
+    if (key == 's' || key == 'S') {
+        input_array[5] = true;
+    }
 }
 
 void keyReleased() {

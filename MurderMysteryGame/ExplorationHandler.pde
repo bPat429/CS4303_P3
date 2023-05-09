@@ -184,7 +184,7 @@ final class ExplorationHandler {
 
         // Check if the player is trying to interact with an item
         // Impose a cooldown because the player doesn't need to search the same place several times
-        if (input_array[6] && (millis() - search_cooldown) > 400) {
+        if (input_array[4] && (millis() - search_cooldown) > 400) {
             search_cooldown = millis();
             // Check if any items are close
             int index = checkInteractablessProximity();
