@@ -1,13 +1,20 @@
 // The objects for each interactable item which can be a clue (excluding the murder weapon)
 // For each clue (e.g. a safe) define a method creating that clue.
-// That method must allow the clue to be relevant, or irrelevant using a boolean
-// Each clue relates to the murder motive
+// Each clue object can be used to prove a specific motive, e.g. a diary can
+// describe how one chacter desparately wanted something from the victim.
+// n.b. Not all of these are relevant to the motives, some are just for decoration
 
 final class ClueObjects {
     private ArrayList<ClueObject> clues;
+    // Clue indexes:
+    // 0 = body
+    // 1 = notebook
+    // 2 = cloth
+    // 3 = safe
     
     ClueObjects(Random rand) {
         clues = new ArrayList<ClueObject>();
+        clues.add(createBody());
         clues.add(createNotebook());
         //clues.add(createCloth());
         clues.add(createSafe());
@@ -24,43 +31,30 @@ final class ClueObjects {
     public int len() {
         return clues.size();
     }
-    
-    // Creates a knife clue
+    // n.b. Always add a clue about which weapon type was used
+    private ClueObject createBody() {
+        ArrayList<String> description = new ArrayList<String>();
+        String image_loc = "body_outline.png";
+        description.add("The victim's body.");
+        return new ClueObject(-1, -1, 0, "body", description, image_loc);
+    }
     private ClueObject createNotebook() {
-        ArrayList<String> hints = new ArrayList<String>();
-        ArrayList<String> clue_hints = new ArrayList<String>();
+        ArrayList<String> description = new ArrayList<String>();
         String image_loc = "notebook.png";
-        String clue_image_loc = "bloodstained_notebook.png";
-        clue_hints.add("This notebook is covered in blood!");
-        clue_hints.add("There's a note in here that says 'I know what you did'");
-        hints.add("A small notebook.");
-        hints.add("It looks like it belongs to someone.");
-        // TODO figure out positioning of clues in the mansion
-        return new ClueObject(-1, -1, 0, "notebook", hints, clue_hints, image_loc, clue_image_loc);
+        description.add("A small notebook.");
+        return new ClueObject(-1, -1, 0, "notebook", description, image_loc);
     }
     
-    /**private ClueObject createCloth() {
-        ArrayList<String> hints = new ArrayList<String>();
-        ArrayList<String> clue_hints = new ArrayList<String>();
+    private ClueObject createCloth() {
+        ArrayList<String> description = new ArrayList<String>();
         String image_loc = "cloth.png";
-        String clue_image_loc = "bloody_cloth.png";
-        clue_hints.add("This cloth is covered in blood!");
-        clue_hints.add("It seems to have come from a torn piece of clothing.");
-        hints.add("A small piece of cloth.");
-        hints.add("It's too small to be of much use.");
-        // TODO figure out positioning of clues in the mansion
-        return new ClueObject(-1, -1, 0, "cloth", hints, clue_hints, image_loc, clue_image_loc);
-    }**/
-    
+        description.add("A small piece of cloth.");
+        return new ClueObject(-1, -1, 0, "cloth", description, image_loc);
+    }
     private ClueObject createSafe() {
-        ArrayList<String> hints = new ArrayList<String>();
-        ArrayList<String> clue_hints = new ArrayList<String>();
+        ArrayList<String> description = new ArrayList<String>();
         String image_loc = "safe.png";
-        String clue_image_loc = "open_safe.png";
-        clue_hints.add("This safe is empty.");
-        clue_hints.add("There's an impression in the dust, as if something has been recently removed.");
-        hints.add("A locked safe.");
-        hints.add("There's no signs of disturbance here.");
-        return new ClueObject(-1, -1, 0, "safe", hints, clue_hints, image_loc, clue_image_loc);
+        description.add("A locked safe.");
+        return new ClueObject(-1, -1, 0, "safe", description, image_loc);
     }
 }
