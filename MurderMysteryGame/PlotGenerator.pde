@@ -93,7 +93,7 @@ class PlotGenerator {
     IProblem runSolver() {
         // Use greedy solver because it uses the RandomWalkDecorator from sat4j
         ISolver solver = SolverFactory.newGreedySolver();
-        solver.setTimeout(10); // 10 second timeout
+        solver.setTimeout(20); // 10 second timeout
         Reader reader = new DimacsReader(solver);
         PrintWriter out = new PrintWriter(System.out,true);
         // CNF filename is given on the command line 
@@ -101,12 +101,12 @@ class PlotGenerator {
             String filename = sketchPath() + "/data/sat/SatProblem.txt";
             IProblem problem = reader.parseInstance(filename);
             if (problem.isSatisfiable()) {
-                System.out.println("Satisfiable !");
+                System.out.println("Sat");
                 reader.decode(problem.model(),out);
                 System.out.println(problem.model(1));
                 return problem;
             } else {
-                System.out.println("Unsatisfiable !");
+                System.out.println("Error: Unsat");
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -186,11 +186,11 @@ class PlotGenerator {
             weapons.getWeapon(c).setRelevance(problem.model(offset + c));
             if (problem.model(offset + c)) {
                 String murdered_by = "";
-                if (weapons.getWeapon(c).getType() == 0) {
+                if (weapons.getWeapon(c).getWeaponType() == 0) {
                     murdered_by = " was poisoned";
-                } else if (weapons.getWeapon(c).getType() == 1) {
+                } else if (weapons.getWeapon(c).getWeaponType() == 1) {
                     murdered_by = " was stabbed";
-                } else if (weapons.getWeapon(c).getType() == 2) {
+                } else if (weapons.getWeapon(c).getWeaponType() == 2) {
                     murdered_by = " was bludgeoned";
                 }
                 clues.getBody().addHint(new ParameterisedDialogue("The police report says ", murdered_by, "", 5));

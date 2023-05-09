@@ -29,7 +29,7 @@ class Weapon extends Interactable {
     return name;
   }
 
-  public int getType() {
+  public int getWeaponType() {
     return weapon_type;
   }
 
@@ -39,6 +39,9 @@ class Weapon extends Interactable {
 
   public void setRelevance(boolean is_relevant) {
     this.is_relevant = is_relevant;
+    if (is_relevant) {
+      super.interactable_image = loadImage(relevant_image_loc);
+    }
   }
 
   public ArrayList<String> getHints() {
