@@ -5,6 +5,7 @@ final int tile_size = 50;
 // Screen handlers
 ExplorationHandler exploration_handler;
 DialogueHandler dialogue_handler;
+AccusationHandler accusation_handler;
 
 // Current screen
 int current_screen;
@@ -30,6 +31,7 @@ void setup() {
     current_screen = -1;
     exploration_handler = new ExplorationHandler(tile_size, rand);
     dialogue_handler = new DialogueHandler(rand);
+    accusation_handler = new AccusationHandler();
     backgroundImage = loadImage("menu_background.png");
     backgroundImage.resize(width, height);
 }
@@ -77,12 +79,17 @@ void draw() {
                 if (current_screen >= exploration_handler.getCharacters().len()) {
                     dialogue_handler.setText(exploration_handler.getInteractables().get(current_screen - exploration_handler.getCharacters().len()).interact());
                 }
+            } else if (current_screen == -3) {
+                accusation_handler.resetAccusationScreen(exploration_handler.getCharacters(), exploration_handler.getVictimIndex());
             }
             break;
         case -3:
-            // Character accusation screen TODO
-            current_screen = -4;
-            // TODO
+            // Character accusation screen
+            current_screen = accusation_handler.run(input_array, current_screen);
+            System.out.println(current_screen);
+            if (current_screen == -2) {
+                enterExplorationScreen();
+            }
             break;
         case -4:
           // Ending screen
@@ -99,7 +106,6 @@ void draw() {
             // current_screen = character index
             current_screen = dialogue_handler.run(input_array, current_screen);
             if (current_screen < 0) {
-                System.out.println("x");
                 enterExplorationScreen();
             }
     }
