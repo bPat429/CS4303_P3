@@ -110,7 +110,6 @@ final class ExplorationHandler {
       // read the tile map from the text file
       for (int y = 0; y < map_height; y++) {
           String line = tilemap_lines[y];
-          //System.out.println("line=" + line);
           for (int x = 0; x < map_width; x++) {
               char tile_char = line.charAt(x);
               if (tile_char == '0') {
@@ -205,7 +204,6 @@ final class ExplorationHandler {
             if (index > -1) {
                 // If the front door then trigger the final screen
                 if(interactables.get(index).getType() == 2) {
-                  System.out.println("Door");
                     return -3;
                 }
                 return cast.len() + index;

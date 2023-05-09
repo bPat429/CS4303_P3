@@ -200,7 +200,6 @@ public class Entity {
                                             offset = (checkWallIntersectsBottom(new int[]{x, y})) ? -1 * (interact_radius * 2 - (y - location.y - 0.5)) : -1 * (interact_radius - (y - location.y - 0.5));
                                             // Avoid 'sticky' behaviour by zeroing out the offset if it is pulling towards the wall
                                             offset = (offset > 0) ? 0 : offset;
-                                                // System.out.println("Adjusting y position: " + offset);
 
                                             
                                         } else {
@@ -218,7 +217,6 @@ public class Entity {
                                             offset = (offset < 0) ? 0 : offset;
                                         }
                                         location.add(offset,  0);
-                                        //    System.out.println("Adjusting x position: " + offset);
  
                                     }
                                 }

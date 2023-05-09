@@ -86,7 +86,6 @@ void draw() {
         case -3:
             // Character accusation screen
             current_screen = accusation_handler.run(input_array, current_screen);
-            System.out.println(current_screen);
             if (current_screen == -2) {
                 enterExplorationScreen();
             }

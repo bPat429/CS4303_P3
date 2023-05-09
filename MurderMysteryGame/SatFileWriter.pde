@@ -57,6 +57,9 @@ class SatFileWriter {
         }
 
         cast.getCharacter(victim_index).setRole(2);
+
+        int used_weapon_index = rand.nextInt(weapons.len());
+
         satFilePath = sketchPath() + "/data/sat/SatProblem.txt";
         clearSATFile();
         sat_file = createWriter("./data/sat/SatProblem.txt");
@@ -65,7 +68,7 @@ class SatFileWriter {
         // Use one line for each fluent
         int fluents_needed = countFluentsNeeded();
         sat_clauses = new ArrayList<String>();
-        generateClauses(murderer_index, victim_index, red_herring_a, red_herring_b, red_herring_c);
+        generateClauses(murderer_index, victim_index, red_herring_a, red_herring_b, red_herring_c, used_weapon_index);
         writeSatFile(sat_file);
 
         sat_file.flush();
@@ -121,7 +124,7 @@ class SatFileWriter {
         sat_clauses.add(clause + " 0");
     }
 
-    void generateClauses(int murderer_index, int victim_index, int red_herring_a, int red_herring_b, int red_herring_c) {
+    void generateClauses(int murderer_index, int victim_index, int red_herring_a, int red_herring_b, int red_herring_c, int used_weapon_index) {
         generateAlibiClauses();
         generateHasAlibiClauses();
         generateHasAccessClauses();
@@ -130,7 +133,7 @@ class SatFileWriter {
         generateIsVictimClauses(victim_index);
         generateIsBystanderClauses(murderer_index, victim_index);
         generateRedHerringClauses(red_herring_a, red_herring_b, red_herring_c);
-        generateWeaponUsedClauses(murderer_index);
+        generateWeaponUsedClauses(murderer_index, used_weapon_index);
         generateHasUsedWeaponClauses();
     }
 
@@ -317,18 +320,22 @@ class SatFileWriter {
     }
 
     // Generate weapon_used clauses
-    void generateWeaponUsedClauses(int murderer_index) {
+    void generateWeaponUsedClauses(int murderer_index, int used_weapon_index) {
         // Assert that WeaponUsed means the murderer has access
         String clause = "";
-        // Assert that at most one weapon is used
         for (int c = 0; c < m; c++) {
             int has_access_a_c = getHasAccessFluent(murderer_index, c);
             int weapon_used_c = getWeaponUsedFluent(c);
             clause = "-" + weapon_used_c + " " + has_access_a_c;
             addClause(clause);
         }
+        // Assert that the pre-selected murder weapon is used
+        int weapon_used_i = getWeaponUsedFluent(used_weapon_index);
+        clause = Integer.toString(weapon_used_i);
+        System.out.println(used_weapon_index);
+        System.out.println(weapon_used_i);
+        addClause(clause);
     }
-
 
     // Generate all has_used_weapon clauses
     void generateHasUsedWeaponClauses() {
@@ -420,7 +427,7 @@ class SatFileWriter {
     // Offset after this = (n^2) + 5*n + (n*m) + 2
     int getHasUsedWeaponFluent() {
         int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 2;
-        return offset + 1;
+        return offset;
     }
 
     // Weapon_Used is listed tenth
