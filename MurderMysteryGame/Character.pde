@@ -87,7 +87,7 @@ class Character extends Entity {
     public String getAlibiDialogue() {
         if (this.alibi_list.size() == 0) {
             return "I was on my own last night.";
-        } else if (this.alibi_list == 1) {
+        } else if (this.alibi_list.size() == 1) {
             return "I was with " + this.alibi_list.get(0) + ". They can vouch for me!";
         } else {
             String alibi_string = "I wasn't alone, I was actually with " + this.alibi_list.get(0);
