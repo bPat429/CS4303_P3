@@ -23,6 +23,7 @@ final class ExplorationHandler {
     // The size of each tile
     private int tile_size;
     private final int test_room_size = 10;
+    private int victim_index;
 
    ExplorationHandler(int tile_size, Random rand) {
     // Initialise the player
@@ -64,6 +65,7 @@ final class ExplorationHandler {
     plot_gen = new PlotGenerator(rand);
     cast = plot_gen.getCast();
     weapons = plot_gen.getWeapons();
+    victim_index = plot_gen.getVictimIndex();
 
     // Add physical clues
     clues = plot_gen.getClues();
@@ -90,6 +92,9 @@ final class ExplorationHandler {
     this.interact_cooldown = millis();
   }
 
+  int getVictimIndex() {
+    return this.victim_index;
+  }
 
 
     // Generate the dungeon level
