@@ -196,6 +196,7 @@ final class ExplorationHandler {
             if (index > -1) {
                 // If the front door then trigger the final screen
                 if(interactables.get(index).getType() == 2) {
+                  System.out.println("Door");
                     return -3;
                 }
                 // TODO implement interactions

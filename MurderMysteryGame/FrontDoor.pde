@@ -6,6 +6,7 @@ class FrontDoor extends Interactable {
     super(x_pos, y_pos, 2, "Front Door");
     // TODO make a better door image
     super.interactable_image = loadImage("door.png");
+    super.interact_radius = 1;
   }
   
   public boolean interact() {
