@@ -124,7 +124,7 @@ public class Entity {
     // Code adapted and reused from P1 shell collision detection
     boolean line_intersects(PVector E, PVector L, PVector C, float r) {
       
-      r = 0.25;
+    //   r = 0.25;
         PVector d = PVector.sub(L, E);
         PVector f = PVector.sub(E, C);
         float a = d.dot(d);
@@ -146,6 +146,14 @@ public class Entity {
         }
     }
 
+    // Used because the character is 'long', instead of circular
+    // this is used to avoid their feet clipping through walls
+    boolean checkWallIntersectsBottom(int[] wall_coords) {
+        PVector bl = new PVector(wall_coords[0] - 0.5, wall_coords[1] - 0.5);
+        PVector br = new PVector(wall_coords[0] + 0.5, wall_coords[1] - 0.5);
+        return line_intersects(bl, br, location, interact_radius * 2);
+    }
+
     // Method used to check if the entity has moved into a wall
     // Adapting solution suggested by https://stackoverflow.com/a/402019
     // Code reused from P1 shell collision detection
@@ -156,7 +164,7 @@ public class Entity {
         PVector tr = new PVector(wall_coords[0] + 0.5, wall_coords[1] + 0.5);
 
       boolean intersects = wallContainsPoint(wall_coords, location) 
-        || line_intersects(bl, br, location, interact_radius)
+        || line_intersects(bl, br, location, interact_radius * 2) // Used to avoid feet clipping through walls
         || line_intersects(br, tr, location, interact_radius)
         || line_intersects(tr, tl, location, interact_radius)
         || line_intersects(bl, tl, location, interact_radius);
@@ -189,14 +197,14 @@ public class Entity {
                                     if (closest_tile[0] == x) {
                                         if (location.y < y) {
                                         // Calculate offset
-                                            offset = -1 * (interact_radius - (y - location.y - 0.5));
+                                            offset = (checkWallIntersectsBottom(new int[]{x, y})) ? -1 * (interact_radius * 2 - (y - location.y - 0.5)) : -1 * (interact_radius - (y - location.y - 0.5));
                                             // Avoid 'sticky' behaviour by zeroing out the offset if it is pulling towards the wall
                                             offset = (offset > 0) ? 0 : offset;
                                                 System.out.println("Adjusting y position: " + offset);
 
                                             
                                         } else {
-                                            offset = (interact_radius - (location.y - y - 0.5));
+                                            offset = (checkWallIntersectsBottom(new int[]{x, y})) ? (interact_radius * 2 - (location.y - y - 0.5)) : (interact_radius - (location.y - y - 0.5));
                                             offset = (offset < 0) ? 0 : offset;
                                         }
                                         location.add(0,  offset);
