@@ -174,7 +174,7 @@ public class Entity {
                     if (y >= 0 && y < level_tile_map[x].length) {
                     
                       // If the tile is blocked
-                        if (level_tile_map[x][y] != 0) {
+                        if (level_tile_map[x][y] != 0 &&  level_tile_map[x][y] != 7  ) {
                             // Ignore diagonal tiles, these shouldn't be necessary
                             if (closest_tile[0] == x || closest_tile[1] == y) {
                                 // Check if the character penetrates

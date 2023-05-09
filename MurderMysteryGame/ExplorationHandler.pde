@@ -19,8 +19,7 @@ final class ExplorationHandler {
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
     private float search_cooldown;
-    PImage tile1a;
-
+ PImage tile1, tile0, tile2, tile3,tile4,tile5,tile6,tile7,tile8;
     // The size of each tile
     private int tile_size;
     private final int test_room_size = 10;
@@ -31,8 +30,41 @@ final class ExplorationHandler {
     this.tile_size = tile_size;
     this.rand = rand;
     // Initialise the character cast
-    tile1a = loadImage("tile1a.png");
-    tile1a.resize(tile_size, tile_size);
+    tile1 = loadImage("tile1.png");
+    tile1.resize(tile_size, tile_size);
+      // Initialise the character cast
+    tile0 = loadImage("tile0.png");
+    tile0.resize(tile_size, tile_size);
+    
+    tile2 = loadImage("tile2.png");
+    tile2.resize(tile_size, tile_size);
+
+    tile3 = loadImage("tile3.png");
+    tile3.resize(tile_size, tile_size);
+    
+     tile4 = loadImage("tile4.png");
+    tile4.resize(tile_size, tile_size);
+ 
+     tile5 = loadImage("tile5.png");
+    tile5.resize(tile_size, tile_size);
+    
+     tile6 = loadImage("tile6.png");
+    tile6.resize(tile_size, tile_size);
+
+    tile7 = loadImage("tile7.png");
+    tile7.resize(tile_size, tile_size);
+ 
+    tile8 = loadImage("tile8.png");
+    tile8.resize(tile_size, tile_size);
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // Generate the plot
     plot_gen = new PlotGenerator(rand);
@@ -51,29 +83,50 @@ final class ExplorationHandler {
 
 
 
-
-
     // Generate the dungeon level
     void generateMansion() {
   
       String[] tilemap_lines = loadStrings("data/txt/Tilemap.txt");
-      int map_height = tilemap_lines.length;
       int map_width = tilemap_lines[0].length();
+      int map_height = tilemap_lines.length;
 
       // create the tile map
-      tile_map = new int[map_height][map_width];
+      tile_map = new int[map_width][map_height];
 
       // read the tile map from the text file
       for (int y = 0; y < map_height; y++) {
           String line = tilemap_lines[y];
-          System.out.println("line=" + line);
+          //System.out.println("line=" + line);
           for (int x = 0; x < map_width; x++) {
               char tile_char = line.charAt(x);
               if (tile_char == '0') {
-                  tile_map[y][x] = 0; // floor
+                  tile_map[x][y] = 0; // floor
               } else if (tile_char == '1') {
-                  tile_map[y][x] = 1; // wall
+                  tile_map[x][y] = 1; // wall
               }
+              
+              else if (tile_char == '2') {
+                  tile_map[x][y] = 2; // pillow
+              }
+               else if (tile_char == '3') {
+                  tile_map[x][y] = 3; 
+              }
+                else if (tile_char == '4') {
+                  tile_map[x][y] = 4; // table
+              }
+               else if (tile_char == '5') {
+                  tile_map[x][y] = 5; // table
+              }
+              else if (tile_char == '6') {
+                  tile_map[x][y] = 6; // table
+              }
+              else if (tile_char == '7') {
+                  tile_map[x][y] = 7; // rug
+              }
+                else if (tile_char == '8') {
+                  tile_map[x][y] = 8; // lamp
+              }
+              
           }
       }
     }
@@ -158,18 +211,71 @@ final class ExplorationHandler {
 
 
   for (int y = 0; y < tile_map.length; y++) {
+  
     for (int x = 0; x < tile_map[0].length; x++) {
       if (tile_map[y][x] == 0) {
+       
         // Show tile1a image for unpopulated spaces
- fill(128);
-        rect(y * tile_size, x * tile_size, tile_size, tile_size);     
+      image(tile0, y * tile_size, x * tile_size);
       } 
       else if (tile_map[y][x] == 1) {
        
-                //image(tile1a, x * tile_size, y * tile_size, tile_size, tile_size);
-      image(tile1a, y * tile_size, x * tile_size);
+       image(tile1, y * tile_size, x * tile_size);
 
-      } else {
+      }
+      
+        else if (tile_map[y][x] == 2) {
+       
+      
+       image(tile2, y * tile_size, x * tile_size);
+      
+        }
+
+      else if (tile_map[y][x] == 3) {
+       
+      image(tile3, y * tile_size, x * tile_size);
+
+      }
+      
+      else if (tile_map[y][x] == 4 ){
+       
+      image(tile4, y * tile_size, x * tile_size);
+
+      } 
+      
+      else if (tile_map[y][x] == 5) {
+       
+      image(tile5, y * tile_size, x * tile_size);
+
+      } 
+      
+      else if (tile_map[y][x] == 6) {
+       
+      image(tile6, y * tile_size, x * tile_size);
+
+      } 
+      
+      else if (tile_map[y][x] == 7) {
+       
+      image(tile7, y * tile_size, x * tile_size);
+
+      }
+      
+       else if (tile_map[y][x] == 7) {
+       
+      image(tile7, y * tile_size, x * tile_size);
+
+      }
+         
+   else if (tile_map[y][x] == 8) {
+        fill(0);
+      image(tile0, y * tile_size, x * tile_size);
+
+            image(tile8, y * tile_size, x * tile_size);
+
+      
+        }
+      else {
         fill(0);
         rect(x * tile_size, y * tile_size, tile_size, tile_size);
       }
