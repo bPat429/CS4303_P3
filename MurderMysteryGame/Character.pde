@@ -9,7 +9,7 @@ class Character extends Entity {
     private ArrayList<String> dialogue;
     private ArrayList<Character> alibi_list;
     // Set of indexes for weapons this character has access to
-    private ArrayList<Clue> accessable_weapons;
+    private ArrayList<Weapon> accessable_weapons;
     private boolean has_motive;
     // The character's assigned role, e.g.
     // 0 = bystander
@@ -32,7 +32,7 @@ class Character extends Entity {
         super.entity_image = loadImage("NPC_placeholder.png");
         this.job = job;
         this.rand = rand;
-        this.accessable_weapons = new ArrayList<Clue>();
+        this.accessable_weapons = new ArrayList<Weapon>();
         this.alibi_list = new ArrayList<Character>();
         // Set role to bystander by default
         role = 0;
@@ -89,11 +89,11 @@ class Character extends Entity {
         this.alibi_list.add(other_char);
     }
 
-    void addWeaponAccess(Clue weapon) {
+    void addWeaponAccess(Weapon weapon) {
         accessable_weapons.add(weapon);
     }
 
-    boolean checkWeaponAccess(Clue weapon) {
+    boolean checkWeaponAccess(Weapon weapon) {
         return accessable_weapons.contains(weapon);
     }
 

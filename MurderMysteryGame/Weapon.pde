@@ -1,13 +1,18 @@
 class Weapon extends Interactable {
   // Index in all hints and descriptions
   private int hint_index;
-  // Basic interaction text describing the object, and any relevant hints
+  // Basic interaction text describing the object
+  private ArrayList<String> weapon_description;
+  // Relevant hints, only displayed if the weapon has been used
   private ArrayList<String> weapon_hints;
   private String relevant_image_loc;
   private boolean is_relevant;
+  private String name;
 
-  Weapon(int x_pos, int y_pos, String name, ArrayList<String> weapon_hints, String image_loc, String relevant_image_loc) {
+  Weapon(int x_pos, int y_pos, String name, ArrayList<String> weapon_description, ArrayList<String> weapon_hints, String image_loc, String relevant_image_loc) {
     super(x_pos, y_pos, 1, name);
+    this.name = name;
+    this.weapon_description = weapon_description;
     this.weapon_hints = weapon_hints;
     this.relevant_image_loc = relevant_image_loc;
     this.hint_index = 0;
@@ -36,9 +41,20 @@ class Weapon extends Interactable {
   }
 
   public String getNextHint() {
-    String next_hint = weapon_hints.get(hint_index);
+    String next_hint;
+    if (this.is_relevant) {
+      if (hint_index >= weapon_description.size()) {
+        next_hint = weapon_hints.get(hint_index - weapon_description.size());
+      } else {
+        next_hint = weapon_description.get(hint_index);
+      }
+      hint_index++;
+      hint_index = (hint_index >= weapon_hints.size() + weapon_description.size()) ? 0 : hint_index;
+      return next_hint;
+    }    
+    next_hint = weapon_description.get(hint_index);
     hint_index++;
-    hint_index = (hint_index >= weapon_hints.size()) ? 0 : hint_index;
+    hint_index = (hint_index >= weapon_description.size()) ? 0 : hint_index;
     return next_hint;
   }
   
@@ -48,9 +64,7 @@ class Weapon extends Interactable {
   // Consider printing onto a 'notepad' which acts as a log
   // for all player interactions in order of interaction?
   public boolean interact() {
-    for (int i = 0; i < weapon_hints.size(); i++) {
-      print(weapon_hints.get(i));
-    }
+    System.out.println(getNextHint());
     return false;
   }
 

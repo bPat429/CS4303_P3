@@ -36,25 +36,25 @@ final class ClueObjects {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "body_outline.png";
         description.add("The victim's body.");
-        return new Clue(-1, -1, 0, "body", description, image_loc);
+        return new Clue(-1, -1, "body", description, image_loc);
     }
     private Clue createNotebook() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "notebook.png";
         description.add("A small notebook.");
-        return new Clue(-1, -1, 0, "notebook", description, image_loc);
+        return new Clue(-1, -1, "notebook", description, image_loc);
     }
     
     private Clue createCloth() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "cloth.png";
         description.add("A small piece of cloth.");
-        return new Clue(-1, -1, 0, "cloth", description, image_loc);
+        return new Clue(-1, -1, "cloth", description, image_loc);
     }
     private Clue createSafe() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "safe.png";
         description.add("A locked safe.");
-        return new Clue(-1, -1, 0, "safe", description, image_loc);
+        return new Clue(-1, -1, "safe", description, image_loc);
     }
 }
