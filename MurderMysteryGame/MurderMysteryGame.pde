@@ -37,6 +37,7 @@ void setup() {
 void enterExplorationScreen() {
   prev_frame_millis = millis();
   current_screen = -2;
+  exploration_handler.resetInteractCooldown();
 }
 
 void draw() { 
@@ -76,7 +77,8 @@ void draw() {
             }
             break;
         case -3:
-            // Character accusation screen
+            // Character accusation screen TODO
+            current_screen = -4;
             // TODO
             break;
         case -4:
@@ -89,6 +91,7 @@ void draw() {
             // current_screen = character index
             current_screen = dialogue_handler.run(input_array, current_screen);
             if (current_screen < 0) {
+                System.out.println("x");
                 enterExplorationScreen();
             }
     }

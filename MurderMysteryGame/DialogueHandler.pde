@@ -35,7 +35,7 @@ final class DialogueHandler {
         Character current_char = cast.getCharacter(character_index);
         // Check if the player is trying to interact with an item
         // Impose a cooldown because the player doesn't need to search the same place several times
-        if ((millis() - input_cooldown) > 400) {
+        if ((millis() - input_cooldown) > 50) {
             input_cooldown = millis();
             
             if (input_array[2]) {
@@ -105,7 +105,7 @@ final class DialogueHandler {
         text("Do you have an alibi?", small_x * 15, displayHeight - small_y * 15);
 
         if (current_selection == 4) {
-            fill(0);
+            fill(255);
         } else {
             fill(100);
         }
