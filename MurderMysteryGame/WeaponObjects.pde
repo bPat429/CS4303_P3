@@ -4,20 +4,20 @@
 // Exactly one weapon is used in each game
 // Specific weapons are only available to certain characters
 final class WeaponObjects {
-    private ArrayList<ClueObject> weapons;
+    private ArrayList<Clue> weapons;
     
     WeaponObjects(Random rand) {
-        weapons = new ArrayList<ClueObject>();
+        weapons = new ArrayList<Clue>();
         weapons.add(createKnife());
         weapons.add(createCandlestick());
         weapons.add(createPoison());
     }
 
-    public ArrayList<ClueObject> getWeapons() {
+    public ArrayList<Clue> getWeapons() {
         return weapons;
     }
 
-    public ClueObject getWeapon(int i) {
+    public Clue getWeapon(int i) {
         return weapons.get(i);
     }
 
@@ -26,21 +26,20 @@ final class WeaponObjects {
     }
     
     // Creates a knife clue
-    private ClueObject createKnife() {
+    private Clue createKnife() {
         ArrayList<String> hints = new ArrayList<String>();
-        ArrayList<String> clue_hints = new ArrayList<String>();
         String image_loc = "knife.png";
-        String clue_image_loc = "bloody_knife.png";
-        clue_hints.add("This knife is covered in blood!");
-        clue_hints.add("The blade is chipped.");
         hints.add("A kitchen knife, razor sharp.");
         hints.add("There are no nicks on the blade, it's owner uses it well.");
+        Clue weapon = new Clue(-1, -1, 1, "knife", hints, image_loc);
+        weapon.addHint(new ParameterisedDialogue("There are traces of blood on the hilt."));
+        weapon.addHint(new ParameterisedDialogue("The blade is chipped."));
         // TODO figure out positioning of clues in the mansion
-        return new ClueObject(-1, -1, 1, "knife", hints, clue_hints, image_loc, clue_image_loc);
+        return new Clue(-1, -1, 1, "knife", hints, image_loc);
     }
 
     // Creates a candlestick clue
-    private ClueObject createCandlestick() {
+    private Clue createCandlestick() {
         ArrayList<String> hints = new ArrayList<String>();
         ArrayList<String> clue_hints = new ArrayList<String>();
         String image_loc = "candlestick.png";
@@ -50,10 +49,10 @@ final class WeaponObjects {
         hints.add("A fancy silver candlestick.");
         hints.add("It looks expensive.");
         // TODO figure out positioning of clues in the mansion
-        return new ClueObject(-1, -1, 1, "candlestick", hints, clue_hints, image_loc, clue_image_loc);
+        return new Clue(-1, -1, 1, "candlestick", hints, clue_hints, image_loc, clue_image_loc);
     }
 
-    private ClueObject createPoison() {
+    private Clue createPoison() {
         ArrayList<String> hints = new ArrayList<String>();
         ArrayList<String> clue_hints = new ArrayList<String>();
         String image_loc = "empty_bottle.png";
@@ -63,6 +62,6 @@ final class WeaponObjects {
         hints.add("An empty bottle.");
         hints.add("There are no labels or markings on it.");
         // TODO figure out positioning of clues in the mansion
-        return new ClueObject(-1, -1, 1, "poison", hints, clue_hints, image_loc, clue_image_loc);
+        return new Clue(-1, -1, 1, "poison", hints, clue_hints, image_loc, clue_image_loc);
     }
 }

@@ -80,18 +80,18 @@ final class Motives {
 
     // Clues TODO
 
-    private ArrayList<ClueObject> argumentClues() {
-        ArrayList<ClueObject> clues = new ArrayList<ClueObject>();
+    private ArrayList<Clue> argumentClues() {
+        ArrayList<Clue> clues = new ArrayList<Clue>();
         return clues;
     }
 
-    private ArrayList<ClueObject> revengeClues() {
-        ArrayList<ClueObject> clues = new ArrayList<ClueObject>();
+    private ArrayList<Clue> revengeClues() {
+        ArrayList<Clue> clues = new ArrayList<Clue>();
         return clues;
     }
 
-    private ArrayList<ClueObject> greedClues() {
-        ArrayList<ClueObject> clues = new ArrayList<ClueObject>();
+    private ArrayList<Clue> greedClues() {
+        ArrayList<Clue> clues = new ArrayList<Clue>();
         return clues;
     }
 }

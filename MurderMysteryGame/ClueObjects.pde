@@ -5,7 +5,7 @@
 // n.b. Not all of these are relevant to the motives, some are just for decoration
 
 final class ClueObjects {
-    private ArrayList<ClueObject> clues;
+    private ArrayList<Clue> clues;
     // Clue indexes:
     // 0 = body
     // 1 = notebook
@@ -13,18 +13,18 @@ final class ClueObjects {
     // 3 = safe
     
     ClueObjects(Random rand) {
-        clues = new ArrayList<ClueObject>();
+        clues = new ArrayList<Clue>();
         clues.add(createBody());
         clues.add(createNotebook());
         clues.add(createCloth());
         clues.add(createSafe());
     }
 
-    public ArrayList<ClueObject> getClues() {
+    public ArrayList<Clue> getClues() {
         return clues;
     }
 
-    public ClueObject getClue(int i) {
+    public Clue getClue(int i) {
         return clues.get(i);
     }
 
@@ -32,29 +32,29 @@ final class ClueObjects {
         return clues.size();
     }
     // n.b. Always add a clue about which weapon type was used
-    private ClueObject createBody() {
+    private Clue createBody() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "body_outline.png";
         description.add("The victim's body.");
-        return new ClueObject(-1, -1, 0, "body", description, image_loc);
+        return new Clue(-1, -1, 0, "body", description, image_loc);
     }
-    private ClueObject createNotebook() {
+    private Clue createNotebook() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "notebook.png";
         description.add("A small notebook.");
-        return new ClueObject(-1, -1, 0, "notebook", description, image_loc);
+        return new Clue(-1, -1, 0, "notebook", description, image_loc);
     }
     
-    private ClueObject createCloth() {
+    private Clue createCloth() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "cloth.png";
         description.add("A small piece of cloth.");
-        return new ClueObject(-1, -1, 0, "cloth", description, image_loc);
+        return new Clue(-1, -1, 0, "cloth", description, image_loc);
     }
-    private ClueObject createSafe() {
+    private Clue createSafe() {
         ArrayList<String> description = new ArrayList<String>();
         String image_loc = "safe.png";
         description.add("A locked safe.");
-        return new ClueObject(-1, -1, 0, "safe", description, image_loc);
+        return new Clue(-1, -1, 0, "safe", description, image_loc);
     }
 }

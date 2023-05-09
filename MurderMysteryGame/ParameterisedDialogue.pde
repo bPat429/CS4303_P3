@@ -12,7 +12,12 @@ class ParameterisedDialogue {
         this.pattern = pattern;
     }
 
-    getString(String suspect, String victim) {
+    ParameterisedDialogue(String string_1) {
+        this.string_1 = string_1;
+        this.pattern = 5;
+    }
+
+    public String getDialogue(String suspect, String victim) {
         switch(pattern) {
             case 0:
                 return string_1 + suspect + string_2 + victim + string_3;
@@ -24,6 +29,8 @@ class ParameterisedDialogue {
                 return suspect + string_1 + suspect + string_2 + victim + string_3;
             case 4:
                 return victim + string_1 + suspect + string_2 + victim + string_3;
+            case 5:
+                return string_1;
             default:
                 return string_1 + suspect + string_2 + victim + string_3;
         }
