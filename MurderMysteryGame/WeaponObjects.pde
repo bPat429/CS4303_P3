@@ -9,8 +9,8 @@ final class WeaponObjects {
     WeaponObjects(Random rand) {
         weapons = new ArrayList<Weapon>();
         weapons.add(createKnife());
-        weapons.add(createCandlestick());
         weapons.add(createPoison());
+        weapons.add(createCandlestick());
     }
 
     public ArrayList<Weapon> getWeapons() {
@@ -46,7 +46,6 @@ final class WeaponObjects {
         hints.add("There's blood on this candlestick!");
         hints.add("It looks like it was used to hit someone.");
         description.add("A fancy silver candlestick.");
-        description.add("It looks expensive.");
         // TODO figure out positioning of clues in the mansion
         return new Weapon(3, 12, "candlestick", 2, description, hints, image_loc, relevant_image_loc);
     }
