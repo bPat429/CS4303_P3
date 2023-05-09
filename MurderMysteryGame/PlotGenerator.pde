@@ -31,7 +31,6 @@ class PlotGenerator {
         applyPlot(problem);
         Motives motives = new Motives(rand, clues);
 
-        // TODO
         int victim_index = sat_writer.getVictimIndex();
 
         // For each character with a motive seed either a clue, or a dialogue line in another living character indicating the motive

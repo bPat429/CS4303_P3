@@ -81,6 +81,24 @@ class Character extends Entity {
         return (this.alibi_list.size() > 0);
     }
 
+    // Return dialogue about who the character was with
+    // The characters are always truthful
+    // TODO flesh this out
+    public String getAlibiDialogue() {
+        if (this.alibi_list.size() == 0) {
+            return "I was on my own last night.";
+        } else if (this.alibi_list == 1) {
+            return "I was with " + this.alibi_list.get(0) + ". They can vouch for me!";
+        } else {
+            String alibi_string = "I wasn't alone, I was actually with " + this.alibi_list.get(0);
+            for (int i = 1; i < this.alibi_list.size() - 1; i++) {
+                alibi_string = ", " + this.alibi_list.get(i);
+            }
+            alibi_string = " and " + this.alibi_list.get(this.alibi_list.size() - 1) + ".";
+            return alibi_string;
+        }
+    }
+
     ArrayList<Character> getAlibis() {
         return this.alibi_list;
     }
