@@ -124,6 +124,7 @@ class SatFileWriter {
     void generateClauses(int murderer_index, int victim_index, int red_herring_a, int red_herring_b, int red_herring_c) {
         generateAlibiClauses();
         generateHasAlibiClauses();
+        generateHasAccessClauses();
         generateHasMurderedClauses(murderer_index, victim_index);
         generateIsMurdererClauses(murderer_index);
         generateIsVictimClauses(victim_index);
@@ -180,7 +181,20 @@ class SatFileWriter {
         }
     }
 
-    // No clauses requried for 'has_access'.
+    // Generate clauses for 'has_access'.
+    void generateHasAccessClauses() {
+        // Ensure that every character has access to at least one weapon to make the game more interesting
+        String clause = "";
+        // If Character a has an alibi then they have an alibi with at least one other person
+        for (int a = 0; a < n; a++) {
+            for (int c = 0; c < m; c++) {
+                clause = (c == 0) ? Integer.toString(getHasAccessFluent(a, c)) : " " + getHasAccessFluent(a, c);
+            }
+            addClause(clause);
+        }
+    }
+
+
     // No clauses required for 'has_motive'.
 
     // Generate all has_murdered clauses
@@ -262,32 +276,41 @@ class SatFileWriter {
     // Each should share two of the three factors with the murderer
     void generateRedHerringClauses(int red_herring_a, int red_herring_b, int red_herring_c) {
         String clause;
+        // Red herring a has no alibi, and a motive
+        int alibi_a = getHasAlibiFluent(red_herring_a);
+        int motive_a = getHasMotiveFluent(red_herring_a);
+        clause = "-" + alibi_a;
+        addClause(clause);
+        clause = Integer.toString(motive_a);
+        addClause(clause);
+        // Red herring b has no alibi, and weapon access
+        int alibi_b = getHasAlibiFluent(red_herring_b);
+        clause = "-" + alibi_b;
+        addClause(clause);
+        for (int c = 0; c < m; c++) {
+            int has_access_b_c = getHasAccessFluent(red_herring_b, c);
+            int weapon_used_c = getWeaponUsedFluent(c);
+            clause = "-" + weapon_used_c + " " + has_access_b_c;
+            addClause(clause);
+        }
+        // Red herring c has a motive, and weapon access
+        int motive_c = getHasMotiveFluent(red_herring_c);
+        clause = Integer.toString(motive_c);
+        addClause(clause);
+        for (int c = 0; c < m; c++) {
+            int has_access_c_d = getHasAccessFluent(red_herring_c, c);
+            int weapon_used_c = getWeaponUsedFluent(c);
+            clause = "-" + weapon_used_c + " " + has_access_c_d;
+            addClause(clause);
+        }
+        // Also ensure that every character has at least one of: no alibi, motive, murder weapon access to make things more interesting
         for (int a = 0; a < n; a++) {
-            // Red herring a has no alibi, and a motive
-            int alibi_a = getHasAlibiFluent(red_herring_a);
-            int motive_a = getHasMotiveFluent(red_herring_a);
-            clause = "-" + alibi_a;
-            addClause(clause);
-            clause = Integer.toString(motive_a);
-            addClause(clause);
-            // Red herring b has no alibi, and weapon access
-            int alibi_b = getHasAlibiFluent(red_herring_b);
-            clause = "-" + alibi_b;
-            addClause(clause);
+            alibi_a = getHasAlibiFluent(a);
+            motive_a = getHasMotiveFluent(a);     
             for (int c = 0; c < m; c++) {
-                int has_access_b_c = getHasAccessFluent(red_herring_b, c);
+                int has_access_a_c = getHasAccessFluent(a, c);
                 int weapon_used_c = getWeaponUsedFluent(c);
-                clause = "-" + weapon_used_c + " " + has_access_b_c;
-                addClause(clause);
-            }
-            // Red herring c has a motive, and weapon access
-            int motive_c = getHasMotiveFluent(red_herring_c);
-            clause = Integer.toString(motive_c);
-            addClause(clause);
-            for (int c = 0; c < m; c++) {
-                int has_access_c_d = getHasAccessFluent(red_herring_c, c);
-                int weapon_used_c = getWeaponUsedFluent(c);
-                clause = "-" + weapon_used_c + " " + has_access_c_d;
+                clause = "-" + weapon_used_c + " " + has_access_a_c + " -" + alibi_a + " " + motive_a;
                 addClause(clause);
             }
         }
