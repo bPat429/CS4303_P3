@@ -85,14 +85,14 @@ void draw() {
             // TODO
             break;
         case -4:
-            // Ending screen
-            image(backgroundImage, 0, 0);
-    textAlign(CENTER);
-    textSize(50);
-    fill(0);
-    text("Game Over", width/2, height/2);
-    textSize(30);
-            break;
+          // Ending screen
+          image(backgroundImage, 0, 0);
+          textAlign(CENTER);
+          textSize(50);
+          fill(0);
+          text("Game Over", width/2, height/2);
+          textSize(30);
+                  break;
         default:
             // Conversation screen
             // Drawn as a large box over the bottom of the exploration screen
