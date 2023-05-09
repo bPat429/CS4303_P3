@@ -86,11 +86,13 @@ void draw() {
         case -3:
             // Character accusation screen
             current_screen = accusation_handler.run(input_array, current_screen);
-            if (current_screen != -3) {
+            System.out.println(current_screen);
+            if (current_screen == -2) {
                 enterExplorationScreen();
             }
             break;
         case -4:
+            System.out.println("Got to 4");
             // Ending screen
             // TODO
             break;
@@ -100,7 +102,6 @@ void draw() {
             // current_screen = character index
             current_screen = dialogue_handler.run(input_array, current_screen);
             if (current_screen < 0) {
-                System.out.println("x");
                 enterExplorationScreen();
             }
     }
