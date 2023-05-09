@@ -2,10 +2,7 @@ final class Player extends Entity {
     private ArrayList<PImage> _right_images;
     private ArrayList<PImage> _left_images;
     private ArrayList<PImage> _up_images;
-        private ArrayList<PImage> _down_images;
-
-    
-    
+    private ArrayList<PImage> _down_images;
     private ArrayList<PImage> _standing_right_images;
     private ArrayList<PImage> _standing_left_images;
     private ArrayList<PImage> _standing_up_images;
