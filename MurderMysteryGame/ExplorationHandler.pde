@@ -19,7 +19,7 @@ final class ExplorationHandler {
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
     private float search_cooldown;
- PImage tile1, tile0, tile2, tile3,tile4,tile5,tile6,tile7,tile8;
+ PImage tile1, tile0, tile2, tile3,tile4,tile5,tile6,tile7,tile8, tile9;
     // The size of each tile
     private int tile_size;
     private final int test_room_size = 10;
@@ -57,7 +57,8 @@ final class ExplorationHandler {
     tile8 = loadImage("tile8.png");
     tile8.resize(tile_size, tile_size);
     
-    
+    tile9 = loadImage("tile9.png");
+    tile9.resize(tile_size, tile_size);
     
     
     
@@ -75,8 +76,9 @@ final class ExplorationHandler {
     clues = plot_gen.getClues();
     interactables = new ArrayList<Interactable>();
     // Spawn in exit door for game over
-    interactables.add(new FrontDoor(3, 1));
-    
+    interactables.add(new FrontDoor(30, 0));
+        interactables.add(new FrontDoor(31, 0));
+
     generateMansion(); // call the method to generate the mansion/tile map
     this.search_cooldown = millis();
 }
@@ -125,6 +127,9 @@ final class ExplorationHandler {
               }
                 else if (tile_char == '8') {
                   tile_map[x][y] = 8; // lamp
+              }
+                else if (tile_char == '9') {
+                  tile_map[x][y] = 9; // bookshelf
               }
               
           }
@@ -270,11 +275,18 @@ final class ExplorationHandler {
    else if (tile_map[y][x] == 8) {
         fill(0);
       image(tile0, y * tile_size, x * tile_size);
-
-            image(tile8, y * tile_size, x * tile_size);
-
+      image(tile8, y * tile_size, x * tile_size); 
       
         }
+        
+          else if (tile_map[y][x] == 9) {
+        fill(0);
+      image(tile0, y * tile_size, x * tile_size);
+      image(tile9, y * tile_size, x * tile_size); 
+      
+        }
+        
+        
       else {
         fill(0);
         rect(x * tile_size, y * tile_size, tile_size, tile_size);
