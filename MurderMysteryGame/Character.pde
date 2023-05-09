@@ -132,6 +132,22 @@ class Character extends Entity {
         return accessable_weapons.contains(weapon);
     }
 
+    // Simple sentence stating which weapons this character has access to
+    String getWeaponAccessString() {
+        String access_string = "";
+        // n.b. in SatFileWriter we guarantee that every character has access to at least one weapon
+        if (accessable_weapons.size() == 1) {
+            access_string = "The only weapon I have access to is " + accessable_weapons.get(0).getName();
+        } else {
+            access_string = "I have access to " + accessable_weapons.get(0).getName();
+            for (int i = 1; i < accessable_weapons.size() - 1; i++) {
+                access_string = access_string + ", " + accessable_weapons.get(i).getName();
+            }
+            access_string = access_string + " and " + accessable_weapons.get(accessable_weapons.size() - 1).getName() + ".";
+        }
+        return access_string;
+    }
+
     void setHasMotive(boolean has_motive) {
         this.has_motive = has_motive;
     }
