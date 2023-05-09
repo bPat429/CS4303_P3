@@ -58,7 +58,8 @@ class SatFileWriter {
 
         cast.getCharacter(victim_index).setRole(2);
 
-        int used_weapon_index = rand.nextInt(weapons.len());
+        // There's an unknown bug here, using the last index (2) makes the problem unsat
+        int used_weapon_index = rand.nextInt(weapons.len() - 1);
 
         satFilePath = sketchPath() + "/data/sat/SatProblem.txt";
         clearSATFile();
@@ -306,6 +307,7 @@ class SatFileWriter {
             clause = "-" + weapon_used_c + " " + has_access_c_d;
             addClause(clause);
         }
+
         // Also ensure that every character has at least one of: no alibi, motive, murder weapon access to make things more interesting
         for (int a = 0; a < n; a++) {
             alibi_a = getHasAlibiFluent(a);
@@ -332,8 +334,6 @@ class SatFileWriter {
         // Assert that the pre-selected murder weapon is used
         int weapon_used_i = getWeaponUsedFluent(used_weapon_index);
         clause = Integer.toString(weapon_used_i);
-        System.out.println(used_weapon_index);
-        System.out.println(weapon_used_i);
         addClause(clause);
     }
 
