@@ -113,8 +113,8 @@ final class DialogueHandler {
             text("Goodbye.", small_x * 15, displayHeight - small_y * 12.5);
         } else {
             fill(255);
-            text(current_text, small_x * 15, displayHeight - small_y * 22.5, small_x * 72.5, small_y * 20);
-            // text(current_text, small_x * 15, displayHeight - small_y * 22.5);
+            text(current_text, small_x * 15, displayHeight - small_y * 27.5, small_x * 72.5, small_y * 15);
+            text("Press (F) to continue...", small_x * 15, displayHeight - small_y * 10);
         }
     }
 }
