@@ -54,17 +54,17 @@ void draw() {
             textSize(25);
             text("Use the following keys to move the player:", 20, 80); // add spacing here
             textSize(20);
-            text("'a' to move left", 40, 110); // add spacing here
-            text("'s' to move down", 40, 140); // add spacing here
-            text("'w' to move up", 40, 170); // add spacing here
-            text("'e' to move right", 40, 200); // add spacing here
+            text("'a' or LEFT to move left", 40, 110); // add spacing here
+            text("'s' or DOWN to move down", 40, 140); // add spacing here
+            text("'w' or UP to move up", 40, 170); // add spacing here
+            text("'d' or RIGHT to move right", 40, 200); // add spacing here
             
             textSize(25);
-            text("Press 's' to start the game.", 20, 250); // add spacing here
-            text("Press 'f' to interact with objects and characters.", 20, 280); // add spacing here
+            text("Press 'f' or ENTER to interact with objects and characters.", 20, 250); // add spacing here
+            text("Press 'f' or ENTER to start the game.", 20, 280); // add spacing here
             // Intro screen
             // TODO
-            if (input_array[5]) {
+            if (input_array[4]) {
               enterExplorationScreen();
             }
             break;
@@ -102,44 +102,38 @@ void draw() {
 }
 
 void keyPressed() {
-  if (key == 'a' || key == 'A') {
+  if (key == 'a' || key == 'A' || (key == CODED && keyCode == LEFT)) {
         input_array[0] = true;
     }
-    if (key == 'd' || key == 'D') {
+    if (key == 'd' || key == 'D' || (key == CODED && keyCode == RIGHT)) {
         input_array[1] = true;
     }
-    if (key == 'w' || key == 'W') {
+    if (key == 'w' || key == 'W' || (key == CODED && keyCode == UP)) {
         input_array[2] = true;
     }
-    if (key == 's' || key == 'S') {
+    if (key == 's' || key == 'S' || (key == CODED && keyCode == DOWN)) {
         input_array[3] = true;
     }
-    if (key == 'f' || key == 'F') {
+    if (key == 'f' || key == 'F' || (key == ENTER)) {
         input_array[4] = true;
-    }
-    if (key == 's' || key == 'S') {
-        input_array[5] = true;
     }
 }
 
 void keyReleased() {
-  if (key == 'a' || key == 'A') {
+  if (key == 'a' || key == 'A' || (key == CODED && keyCode == LEFT)) {
         input_array[0] = false;
     }
-    if (key == 'd' || key == 'D') {
+    if (key == 'd' || key == 'D' || (key == CODED && keyCode == RIGHT)) {
         input_array[1] = false;
     }
-    if (key == 'w' || key == 'W') {
+    if (key == 'w' || key == 'W' || (key == CODED && keyCode == UP)) {
         input_array[2] = false;
     }
-    if (key == 's' || key == 'S') {
+    if (key == 's' || key == 'S' || (key == CODED && keyCode == DOWN)) {
         input_array[3] = false;
     }
-  if (key == 'f' || key == 'F') {
+  if (key == 'f' || key == 'F' || (key == ENTER)) {
     input_array[4] = false;
   }
-  if (key == 's' || key == 'S') {
-    input_array[5] = false;
-    }
     
 }
