@@ -128,13 +128,13 @@ class Character extends Entity {
         if (this.alibi_list.size() == 0) {
             return "I was on my own last night.";
         } else if (this.alibi_list.size() == 1) {
-            return "I was with " + this.alibi_list.get(0) + ". They can vouch for me!";
+            return "I was with " + this.alibi_list.get(0).getName() + ". They can vouch for me!";
         } else {
-            String alibi_string = "I wasn't alone, I was actually with " + this.alibi_list.get(0);
+            String alibi_string = "I wasn't alone, I was actually with " + this.alibi_list.get(0).getName();
             for (int i = 1; i < this.alibi_list.size() - 1; i++) {
-                alibi_string = ", " + this.alibi_list.get(i);
+                alibi_string = ", " + this.alibi_list.get(i).getName();
             }
-            alibi_string = " and " + this.alibi_list.get(this.alibi_list.size() - 1) + ".";
+            alibi_string = " and " + this.alibi_list.get(this.alibi_list.size() - 1).getName() + ".";
             return alibi_string;
         }
     }
@@ -160,13 +160,13 @@ class Character extends Entity {
         String access_string = "";
         // n.b. in SatFileWriter we guarantee that every character has access to at least one weapon
         if (accessable_weapons.size() == 1) {
-            access_string = "The only weapon I have access to is " + accessable_weapons.get(0).getName();
+            access_string = "The only weapon I have access to is the " + accessable_weapons.get(0).getName();
         } else {
-            access_string = "I have access to " + accessable_weapons.get(0).getName();
+            access_string = "I have access to the " + accessable_weapons.get(0).getName();
             for (int i = 1; i < accessable_weapons.size() - 1; i++) {
-                access_string = access_string + ", " + accessable_weapons.get(i).getName();
+                access_string = access_string + ", the " + accessable_weapons.get(i).getName();
             }
-            access_string = access_string + " and " + accessable_weapons.get(accessable_weapons.size() - 1).getName() + ".";
+            access_string = access_string + " and the " + accessable_weapons.get(accessable_weapons.size() - 1).getName() + ".";
         }
         return access_string;
     }
