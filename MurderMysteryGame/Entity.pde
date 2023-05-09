@@ -206,7 +206,7 @@ public class Entity {
                                             offset = (offset < 0) ? 0 : offset;
                                         }
                                         location.add(offset,  0);
-                                           System.out.println("Adjusting x position: " + offset);
+                                        //    System.out.println("Adjusting x position: " + offset);
  
                                     }
                                 }
