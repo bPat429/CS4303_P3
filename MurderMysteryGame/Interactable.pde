@@ -55,9 +55,9 @@ class Interactable {
   // Generic interact method to be overided
   // This represents interacting with the object while in the dungeon level screen
   // Returns true if the item should be removed from the interactables list.
-  public boolean interact() {
+  public String interact() {
     print("Error, interaction not implemented yet");
-    return false;
+    return "";
   }
 
   // Generic interact method to be overided

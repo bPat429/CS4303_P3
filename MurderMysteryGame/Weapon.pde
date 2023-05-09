@@ -66,15 +66,22 @@ class Weapon extends Interactable {
     hint_index = (hint_index >= weapon_description.size()) ? 0 : hint_index;
     return next_hint;
   }
+
+  String getAllHints() {
+      String all_hints = "";
+      for (int i = 0; i < weapon_description.size(); i++) {
+        all_hints = all_hints + " " + weapon_description.get(i);
+      }
+      if (is_relevant) {
+        for (int i = 0; i < weapon_hints.size(); i++) {
+          all_hints = all_hints + " " + weapon_hints.get(i);
+        }
+      }
+      return all_hints;
+  }
   
-  // Generic interact method to be overided
-  // TODO show text in game
-  // Currently prints to the terminal when interacted with
-  // Consider printing onto a 'notepad' which acts as a log
-  // for all player interactions in order of interaction?
-  public boolean interact() {
-    System.out.println(getNextHint());
-    return false;
+  public String interact() {
+    return getAllHints();
   }
 
   void setPosition(int x_pos, int y_pos) {

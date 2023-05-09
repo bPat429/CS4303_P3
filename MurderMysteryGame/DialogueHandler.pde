@@ -1,6 +1,9 @@
 import java.util.Random;
 import java.util.ArrayList;
 
+// Class used for handling interaction with characters, clues and weapons.
+// Interaction with characters gives access to a dialogue tree.
+// Interaction with clues and weapons prints all information at once.
 final class DialogueHandler {
     private Random rand;
     private int current_selection;
@@ -32,45 +35,60 @@ final class DialogueHandler {
         input_cooldown = millis();
     }
 
-    int run(boolean[] input_array, int character_index) {
-        Character current_char = cast.getCharacter(character_index);
-        // Check if the player is trying to interact with an item
-        // Impose a cooldown because the player doesn't need to search the same place several times
-        if ((millis() - input_cooldown) > 100) {
-            input_cooldown = millis();
-            
-            if (input_array[2]) {
-                current_selection = (current_selection == 0) ? current_selection : current_selection - 1;
-            }
+    public void setText(String text) {
+        in_menu = false;
+        this.current_text = text;
+    }
 
-            if (input_array[3]) {
-                current_selection = (current_selection == 4) ? current_selection : current_selection + 1;
-            }
-            if (input_array[4]) {
-                if (in_menu) {
-                    if (current_selection == 0) {
-                        current_text = current_char.getGreeting();
-                    } else if (current_selection == 1) {
-                        current_text = current_char.getDialogueHints();
-                    } else if (current_selection == 2) {
-                        current_text = current_char.getWeaponAccessString();
-                    } else if (current_selection == 3) {
-                        current_text = current_char.getAlibiDialogue();
-                    } else {
-                        // Return to the exploration screen
-                        return -2;
-                    }
+    int run(boolean[] input_array, int selection_index) {
+        if (selection_index >= cast.len()) {
+            if ((millis() - input_cooldown) > 100) {
+                if (input_array[4]) {
+                    input_cooldown = millis();
+                    return -2;
                 }
-                in_menu = !in_menu;
             }
-        }
+            drawScreen();
+        } else {
+            Character current_char = cast.getCharacter(selection_index);
+            // Check if the player is trying to interact with an item
+            // Impose a cooldown because the player doesn't need to search the same place several times
+            if ((millis() - input_cooldown) > 100) {
+                input_cooldown = millis();
+                
+                if (input_array[2]) {
+                    current_selection = (current_selection == 0) ? current_selection : current_selection - 1;
+                }
 
-        // draw level
-        drawScreen(player);
-        return character_index;
+                if (input_array[3]) {
+                    current_selection = (current_selection == 4) ? current_selection : current_selection + 1;
+                }
+                if (input_array[4]) {
+                    if (in_menu) {
+                        if (current_selection == 0) {
+                            current_text = current_char.getGreeting();
+                        } else if (current_selection == 1) {
+                            current_text = current_char.getDialogueHints();
+                        } else if (current_selection == 2) {
+                            current_text = current_char.getWeaponAccessString();
+                        } else if (current_selection == 3) {
+                            current_text = current_char.getAlibiDialogue();
+                        } else {
+                            // Return to the exploration screen
+                            return -2;
+                        }
+                    }
+                    in_menu = !in_menu;
+                }
+            }
+
+            // draw level
+            drawScreen();
+        }
+        return selection_index;
 }
 
-    void drawScreen(Player player) {
+    void drawScreen() {
         int small_x = displayWidth/100;
         int small_y = displayHeight/100;
         // Draw the dialogue box background

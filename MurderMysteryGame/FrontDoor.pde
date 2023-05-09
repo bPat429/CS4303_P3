@@ -9,11 +9,6 @@ class FrontDoor extends Interactable {
     super.interact_radius = 1;
   }
   
-  public boolean interact() {
-    System.out.println("GO TO ACCUSATION SCREEN");
-    return false;
-  }
-  
   void drawComponent(int tile_size) {
     image(super.interactable_image, tile_size * super.location[0], tile_size * super.location[1], tile_size , tile_size);
   }

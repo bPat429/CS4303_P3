@@ -150,6 +150,10 @@ final class ExplorationHandler {
     public Player getPlayer() {
       return this.player;
     }
+
+    public ArrayList<Interactable> getInteractables() {
+      return this.interactables;
+    }
         
          
     // Return the index of the first object which is close enough to interact with
@@ -199,8 +203,7 @@ final class ExplorationHandler {
                   System.out.println("Door");
                     return -3;
                 }
-                // TODO implement interactions
-                interactables.get(index).interact();
+                return cast.len() + index;
             } else {
                 // Check if any characters are close
                 index = checkCharacterProximity();

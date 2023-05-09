@@ -51,15 +51,22 @@ class Clue extends Interactable {
     hint_index = (hint_index >= clue_description.size()) ? 0 : hint_index;
     return next_hint;
   }
+
+  String getAllHints() {
+      String all_hints = "";
+      for (int i = 0; i < clue_description.size(); i++) {
+        all_hints = all_hints + " " + clue_description.get(i);
+      }
+      if (in_use) {
+        for (int i = 0; i < parameterised_hints.size(); i++) {
+          all_hints = all_hints + " " + parameterised_hints.get(i).getDialogue(this.suspect, this.victim);
+        }
+      }
+      return all_hints;
+  }
   
-  // Generic interact method to be overided
-  // TODO show text in game
-  // Currently prints to the terminal when interacted with
-  // Consider printing onto a 'notepad' which acts as a log
-  // for all player interactions in order of interaction?
-  public boolean interact() {
-    System.out.println(getNextHint());
-    return false;
+  public String interact() {
+    return getAllHints();
   }
 
   void setPosition(int x_pos, int y_pos) {

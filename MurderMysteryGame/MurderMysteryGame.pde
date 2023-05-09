@@ -74,6 +74,9 @@ void draw() {
             current_screen = exploration_handler.run(input_array, frame_duration);
             if (current_screen > -1) {
                 dialogue_handler.resetDialogueScreen(exploration_handler.getPlayer(), exploration_handler.getCharacters());
+                if (current_screen >= exploration_handler.getCharacters().len()) {
+                    dialogue_handler.setText(exploration_handler.getInteractables().get(current_screen - exploration_handler.getCharacters().len()).interact());
+                }
             }
             break;
         case -3:
