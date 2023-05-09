@@ -29,7 +29,7 @@ class Weapon extends Interactable {
     return name;
   }
 
-  public int getType() {
+  public int getWeaponType() {
     return weapon_type;
   }
 

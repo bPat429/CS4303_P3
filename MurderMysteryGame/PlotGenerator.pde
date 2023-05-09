@@ -186,11 +186,11 @@ class PlotGenerator {
             weapons.getWeapon(c).setRelevance(problem.model(offset + c));
             if (problem.model(offset + c)) {
                 String murdered_by = "";
-                if (weapons.getWeapon(c).getType() == 0) {
+                if (weapons.getWeapon(c).getWeaponType() == 0) {
                     murdered_by = " was poisoned";
-                } else if (weapons.getWeapon(c).getType() == 1) {
+                } else if (weapons.getWeapon(c).getWeaponType() == 1) {
                     murdered_by = " was stabbed";
-                } else if (weapons.getWeapon(c).getType() == 2) {
+                } else if (weapons.getWeapon(c).getWeaponType() == 2) {
                     murdered_by = " was bludgeoned";
                 }
                 clues.getBody().addHint(new ParameterisedDialogue("The police report says ", murdered_by, "", 5));
