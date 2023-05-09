@@ -34,7 +34,7 @@ final class WeaponObjects {
         description.add("A kitchen knife, razor sharp.");
         hints.add("There are traces of blood on the hilt.");
         hints.add("The blade is chipped.");
-        return new Weapon(-1, -1, "knife", description, hints, image_loc, relevant_image_loc);
+        return new Weapon(-1, -1, "knife", 1, description, hints, image_loc, relevant_image_loc);
     }
 
     // Creates a candlestick clue
@@ -48,7 +48,7 @@ final class WeaponObjects {
         description.add("A fancy silver candlestick.");
         description.add("It looks expensive.");
         // TODO figure out positioning of clues in the mansion
-        return new Weapon(-1, -1, "candlestick", description, hints, image_loc, relevant_image_loc);
+        return new Weapon(-1, -1, "candlestick", 2, description, hints, image_loc, relevant_image_loc);
     }
 
     private Weapon createPoison() {
@@ -60,6 +60,6 @@ final class WeaponObjects {
         hints.add("The bottle is half full.");
         hints.add("There is some spilled liquid, it has been used recently.");
         // TODO figure out positioning of clues in the mansion
-        return new Weapon(-1, -1, "poison", description, hints, image_loc, relevant_image_loc);
+        return new Weapon(-1, -1, "poison", 0, description, hints, image_loc, relevant_image_loc);
     }
 }

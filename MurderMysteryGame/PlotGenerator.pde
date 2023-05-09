@@ -151,11 +151,23 @@ class PlotGenerator {
         return offset + n;
     }
 
+    // Also add a clue to the body which describes the type of weapon used
     int applyWeaponUsed(IProblem problem, int offset) {
         int m = weapons.len();
         // Use the same formulae as in SatFileWriter to convert fluents to specific ints
         for (int c = 0; c < m; c++) {
             weapons.getWeapon(c).setRelevance(problem.model(offset + c));
+            if (problem.model(offset + c)) {
+                String murdered_by = "";
+                if (weapons.getWeapon(c).getType() == 0) {
+                    murdered_by = " was poisoned";
+                } else if (weapons.getWeapon(c).getType() == 1) {
+                    murdered_by = " was stabbed";
+                } else if (weapons.getWeapon(c).getType() == 2) {
+                    murdered_by = " was bludgeoned";
+                }
+                clues.getBody().addHint(new ParameterisedDialogue("The police report says ", murdered_by, "", 5));
+            }
         }
         // Return the new offset
         return offset + m;

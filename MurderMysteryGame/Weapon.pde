@@ -8,10 +8,15 @@ class Weapon extends Interactable {
   private String relevant_image_loc;
   private boolean is_relevant;
   private String name;
+  private int weapon_type;
+  // 0 = poison
+  // 1 = blade
+  // 2 = blunt
 
-  Weapon(int x_pos, int y_pos, String name, ArrayList<String> weapon_description, ArrayList<String> weapon_hints, String image_loc, String relevant_image_loc) {
+  Weapon(int x_pos, int y_pos, String name, int weapon_type, ArrayList<String> weapon_description, ArrayList<String> weapon_hints, String image_loc, String relevant_image_loc) {
     super(x_pos, y_pos, 1, name);
     this.name = name;
+    this.weapon_type = weapon_type;
     this.weapon_description = weapon_description;
     this.weapon_hints = weapon_hints;
     this.relevant_image_loc = relevant_image_loc;
@@ -22,6 +27,10 @@ class Weapon extends Interactable {
   
   public String getName() {
     return name;
+  }
+
+  public int getType() {
+    return weapon_type;
   }
 
   public boolean isRelevant() {

@@ -38,17 +38,15 @@ class Clue extends Interactable {
     parameterised_hints.add(hint);
   }
 
-  public String getNextHint(String suspect, String victim) {
+  public String getNextHint(String victim) {
     String next_hint;
     if (hint_index >= clue_description.size() && parameterised_hints.size() > 0) {
-      // ParameterisedDialogue parameterised_hint = parameterised_hints.get(hint_index - clue_description.size());
-      ParameterisedDialogue parameterised_hint = new ParameterisedDialogue("", "", "", 0);
-      next_hint = parameterised_hint.getDialogue(suspect, victim);
+      next_hint = parameterised_hints.get(hint_index - clue_description.size()).getDialogue(suspect, victim);
     } else {
-      next_hint = clue_description.get(hint_index % clue_description.size());
+      next_hint = clue_description.get(hint_index);
     }
     hint_index++;
-    hint_index = (hint_index > clue_description.size() + parameterised_hints.size()) ? 0 : hint_index;
+    hint_index = (hint_index >= clue_description.size() + parameterised_hints.size()) ? 0 : hint_index;
     return next_hint;
   }
   
@@ -57,13 +55,8 @@ class Clue extends Interactable {
   // Currently prints to the terminal when interacted with
   // Consider printing onto a 'notepad' which acts as a log
   // for all player interactions in order of interaction?
-  public boolean interact() {
-    for (int i = 0; i < clue_description.size(); i++) {
-      print(clue_description.get(i));
-    }
-    for (int i = 0; i < parameterised_hints.size(); i++) {
-      print(parameterised_hints.get(i));
-    }
+  public boolean interact(String victim) {
+    getNextHint(victim);
     return false;
   }
 

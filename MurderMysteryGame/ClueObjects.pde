@@ -28,6 +28,11 @@ final class ClueObjects {
         return clues.get(i);
     }
 
+    // Get the body of the victim
+    public Clue getBody() {
+        return clues.get(0);
+    }
+
     public int len() {
         return clues.size();
     }
