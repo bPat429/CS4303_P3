@@ -16,7 +16,7 @@ final class ClueObjects {
         clues = new ArrayList<Clue>();
         clues.add(createBody());
         clues.add(createNotebook());
-        clues.add(createCloth());
+        //clues.add(createCloth());
         clues.add(createSafe());
     }
 
