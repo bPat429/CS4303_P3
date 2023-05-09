@@ -137,7 +137,14 @@ final class ExplorationHandler {
           }
       }
     }
-        
+
+    public CharacterCast getCharacters() {
+      return this.cast;
+    }
+
+    public Player getPlayer() {
+      return this.player;
+    }
         
          
     // Return the index of the first object which is close enough to interact with

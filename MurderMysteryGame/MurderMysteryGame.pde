@@ -7,7 +7,7 @@ final int tile_size = 50;
 
 // Screen handlers
 ExplorationHandler exploration_handler;
-
+DialogueHandler dialogue_handler;
 
 // Current screen
 int current_screen;
@@ -31,6 +31,7 @@ void setup() {
     rand = new Random();
     current_screen = -1;
     exploration_handler = new ExplorationHandler(tile_size, rand);
+    dialogue_handler = new DialogueHandler(rand);
 }
 
 void enterExplorationScreen() {
@@ -49,6 +50,9 @@ void draw() {
             frame_duration = (millis() - prev_frame_millis)/1000;
             // Exploration screen
             current_screen = exploration_handler.run(input_array, frame_duration);
+            if (current_screen > -1) {
+                dialogue_handler.resetDialogueScreen(exploration_handler.getPlayer(), exploration_handler.getCharacters());
+            }
             break;
         case -3:
             // Character accusation screen
@@ -60,8 +64,12 @@ void draw() {
             break;
         default:
             // Conversation screen
-            // TODO
+            // Drawn as a large box over the bottom of the exploration screen
             // current_screen = character index
+            current_screen = dialogue_handler.run(input_array, current_screen);
+            if (current_screen < 0) {
+                enterExplorationScreen();
+            }
     }
     prev_frame_millis = millis();
 }
