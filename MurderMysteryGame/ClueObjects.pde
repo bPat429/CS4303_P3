@@ -9,7 +9,7 @@ final class ClueObjects {
     ClueObjects(Random rand) {
         clues = new ArrayList<ClueObject>();
         clues.add(createNotebook());
-        clues.add(createCloth());
+        //clues.add(createCloth());
         clues.add(createSafe());
     }
 
@@ -39,7 +39,7 @@ final class ClueObjects {
         return new ClueObject(-1, -1, 0, "notebook", hints, clue_hints, image_loc, clue_image_loc);
     }
     
-    private ClueObject createCloth() {
+    /**private ClueObject createCloth() {
         ArrayList<String> hints = new ArrayList<String>();
         ArrayList<String> clue_hints = new ArrayList<String>();
         String image_loc = "cloth.png";
@@ -50,7 +50,8 @@ final class ClueObjects {
         hints.add("It's too small to be of much use.");
         // TODO figure out positioning of clues in the mansion
         return new ClueObject(-1, -1, 0, "cloth", hints, clue_hints, image_loc, clue_image_loc);
-    }
+    }**/
+    
     private ClueObject createSafe() {
         ArrayList<String> hints = new ArrayList<String>();
         ArrayList<String> clue_hints = new ArrayList<String>();
