@@ -28,7 +28,7 @@ public class Entity {
         this.movement_vector = new PVector(0, 0);
         this.interact_radius = 0.25;
         this.rotation_const = 0.1;
-        this.entity_speed = 4;
+        this.entity_speed = 6;
     }
 
     public String getName() {

@@ -23,6 +23,7 @@ class SatFileWriter {
         // Do this outside of SAT for convenience and to avoid higher probabilities for murderers and victims which
         // are more likely (TODO mention this in the report)
         int murderer_index = rand.nextInt(cast.len());
+        cast.getCharacter(murderer_index).setRole(1);
         boolean victim_chosen = false;
         victim_index = -1;
         while (!victim_chosen) {
@@ -30,7 +31,32 @@ class SatFileWriter {
             victim_index = rand.nextInt(cast.len());
             victim_chosen = (victim_index != murderer_index);
         }
+        // Create three characters who must be 'red herrings', where they have 2/3 of motive/murder weapon access/no alibi
+        // Do this because SAT will give preference to simpler problems where fewer characters are suspicious, and therefore there
+        // are more similar plans
+        boolean red_herring = false;
+        int red_herring_a = -1;
+        while (!red_herring) {
+            // Randomly select a victim from the cast, avoid choosing the murderer
+            red_herring_a = rand.nextInt(cast.len());
+            red_herring = (red_herring_a != murderer_index && red_herring_a != victim_index);
+        }
+        red_herring = false;
+        int red_herring_b = -1;
+        while (!red_herring) {
+            // Randomly select a victim from the cast, avoid choosing the murderer
+            red_herring_b = rand.nextInt(cast.len());
+            red_herring = (red_herring_b != murderer_index && red_herring_b != victim_index && red_herring_b != red_herring_a);
+        }
+        red_herring = false;
+        int red_herring_c = -1;
+        while (!red_herring) {
+            // Randomly select a victim from the cast, avoid choosing the murderer
+            red_herring_c = rand.nextInt(cast.len());
+            red_herring = (red_herring_c != murderer_index && red_herring_c != victim_index && red_herring_c != red_herring_a && red_herring_c != red_herring_b);
+        }
 
+        cast.getCharacter(victim_index).setRole(2);
         satFilePath = sketchPath() + "/data/sat/SatProblem.txt";
         clearSATFile();
         sat_file = createWriter("./data/sat/SatProblem.txt");
@@ -39,7 +65,7 @@ class SatFileWriter {
         // Use one line for each fluent
         int fluents_needed = countFluentsNeeded();
         sat_clauses = new ArrayList<String>();
-        generateClauses(murderer_index, victim_index);
+        generateClauses(murderer_index, victim_index, red_herring_a, red_herring_b, red_herring_c);
         writeSatFile(sat_file);
 
         sat_file.flush();
@@ -95,13 +121,15 @@ class SatFileWriter {
         sat_clauses.add(clause + " 0");
     }
 
-    void generateClauses(int murderer_index, int victim_index) {
+    void generateClauses(int murderer_index, int victim_index, int red_herring_a, int red_herring_b, int red_herring_c) {
         generateAlibiClauses();
         generateHasAlibiClauses();
         generateHasMurderedClauses(murderer_index, victim_index);
         generateIsMurdererClauses(murderer_index);
         generateIsVictimClauses(victim_index);
         generateIsBystanderClauses(murderer_index, victim_index);
+        generateRedHerringClauses(red_herring_a, red_herring_b, red_herring_c);
+        generateWeaponUsedClauses(murderer_index);
         generateHasUsedWeaponClauses();
     }
 
@@ -137,10 +165,11 @@ class SatFileWriter {
 
     // Generate all has_alibi clauses for each character
     void generateHasAlibiClauses() {
+        String clause;
         // If Character a has an alibi then they have an alibi with at least one other person
         for (int a = 0; a < n; a++) {
             int has_alibi_a = getHasAlibiFluent(a);
-            String clause = "-" + has_alibi_a;
+            clause = "-" + has_alibi_a;
             for (int b = 0; b < n; b++) {
                 if (a != b) {
                     int alibi = getAlibiFluent(a, b);
@@ -151,8 +180,7 @@ class SatFileWriter {
         }
     }
 
-    // No clauses required for 'has_access'. Who has access is automatically generated. TODO consider adding restrictions based on jobs
-
+    // No clauses requried for 'has_access'.
     // No clauses required for 'has_motive'.
 
     // Generate all has_murdered clauses
@@ -160,10 +188,13 @@ class SatFileWriter {
         // If character a murders b then a and b both don't have an alibi, a has a motive and the weapon c has been used
         // We already know the identity of the murderer and victim, so only generate the clauses for them.
         int murdered_a_b = getHasMurderedFluent();
+        int motive_a = getHasMotiveFluent(murderer_index);
         int has_alibi_a = getHasAlibiFluent(murderer_index);
         int has_alibi_b = getHasAlibiFluent(victim_index);
         int has_used_weapon = getHasUsedWeaponFluent();
         String clause = "-" + murdered_a_b + " -" + has_alibi_a;
+        addClause(clause);
+        clause = "-" + murdered_a_b + " " + motive_a;
         addClause(clause);
         clause = "-" + murdered_a_b + " -" + has_alibi_b;
         addClause(clause);
@@ -227,7 +258,54 @@ class SatFileWriter {
         }
     }
 
-    // No clauses needed for weapon_used fluents, these are included in generateHasUsedWeaponClauses
+    // Generate all clauses for the red herrings
+    // Each should share two of the three factors with the murderer
+    void generateRedHerringClauses(int red_herring_a, int red_herring_b, int red_herring_c) {
+        String clause;
+        for (int a = 0; a < n; a++) {
+            // Red herring a has no alibi, and a motive
+            int alibi_a = getHasAlibiFluent(red_herring_a);
+            int motive_a = getHasMotiveFluent(red_herring_a);
+            clause = "-" + alibi_a;
+            addClause(clause);
+            clause = Integer.toString(motive_a);
+            addClause(clause);
+            // Red herring b has no alibi, and weapon access
+            int alibi_b = getHasAlibiFluent(red_herring_b);
+            clause = "-" + alibi_b;
+            addClause(clause);
+            for (int c = 0; c < m; c++) {
+                int has_access_b_c = getHasAccessFluent(red_herring_b, c);
+                int weapon_used_c = getWeaponUsedFluent(c);
+                clause = "-" + weapon_used_c + " " + has_access_b_c;
+                addClause(clause);
+            }
+            // Red herring c has a motive, and weapon access
+            int motive_c = getHasMotiveFluent(red_herring_c);
+            clause = Integer.toString(motive_c);
+            addClause(clause);
+            for (int c = 0; c < m; c++) {
+                int has_access_c_d = getHasAccessFluent(red_herring_c, c);
+                int weapon_used_c = getWeaponUsedFluent(c);
+                clause = "-" + weapon_used_c + " " + has_access_c_d;
+                addClause(clause);
+            }
+        }
+    }
+
+    // Generate weapon_used clauses
+    void generateWeaponUsedClauses(int murderer_index) {
+        // Assert that WeaponUsed means the murderer has access
+        String clause = "";
+        // Assert that at most one weapon is used
+        for (int c = 0; c < m; c++) {
+            int has_access_a_c = getHasAccessFluent(murderer_index, c);
+            int weapon_used_c = getWeaponUsedFluent(c);
+            clause = "-" + weapon_used_c + " " + has_access_a_c;
+            addClause(clause);
+        }
+    }
+
 
     // Generate all has_used_weapon clauses
     void generateHasUsedWeaponClauses() {

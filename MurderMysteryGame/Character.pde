@@ -24,12 +24,27 @@ class Character extends Entity {
     // 4 = guest
     int job;
 
-    // Create an Character
+    // Create an Character, default method for development
     // Automatically set position to (0, 0) before moving them to their required position after generating the plot
     Character(String name, int job, Random rand, ArrayList<String> dialogue) {
-        super(0, 0, name);
+        super(5, 5, name);
         this.dialogue = dialogue;
         super.entity_image = loadImage("NPC_placeholder.png");
+        this.job = job;
+        this.rand = rand;
+        this.accessable_weapons = new ArrayList<Weapon>();
+        this.alibi_list = new ArrayList<Character>();
+        // Set role to bystander by default
+        role = 0;
+    }
+
+    // Create an Character with an image
+    // Automatically set position to (0, 0) before moving them to their required position after generating the plot
+    Character(int x_pos, int y_pos, String name, int job, Random rand, ArrayList<String> dialogue, String image_loc) {
+        super(x_pos, y_pos, name);
+        this.dialogue = dialogue;
+        super.entity_image = loadImage(image_loc);
+        // super.entity_image = loadImage("NPC_placeholder.png");
         this.job = job;
         this.rand = rand;
         this.accessable_weapons = new ArrayList<Weapon>();
@@ -54,7 +69,9 @@ class Character extends Entity {
       
 
     void addDialogue(String s) {
-        dialogue.add(s);
+        if (!dialogue.contains(s)) {
+            dialogue.add(s);
+        }
     }
 
     ArrayList<String> getDialogue() {

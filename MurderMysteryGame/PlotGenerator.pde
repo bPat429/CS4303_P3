@@ -8,8 +8,7 @@ class PlotGenerator {
     private CharacterCast cast;
     private WeaponObjects weapons;
     private ClueObjects clues;
-    private Character murderer;
-    private Character victim;
+    private int victim_index;
     private Random rand;
 
     PlotGenerator(Random rand) {
@@ -27,69 +26,52 @@ class PlotGenerator {
             return;
         }
 
+        victim_index = sat_writer.getVictimIndex();
+
         // Apply changes to the cast of characters according to the generated plan
         applyPlot(problem);
         Motives motives = new Motives(rand, clues);
 
-        int victim_index = sat_writer.getVictimIndex();
-
         // For each character with a motive seed either a clue, or a dialogue line in another living character indicating the motive
         for (int a = 0; a < cast.len(); a++) {
             if (cast.getCharacter(a).hasMotive()) {
-                boolean clue_seeded = false;
-                // Choose a type of motive
-                MotiveType motive_type = motives.getRandomMotiveType();
+                boolean successfully_seeded = false;
+                while (!successfully_seeded) {
+                    successfully_seeded = trySeedMotive(motives, rand, a);
+                }
+                System.out.println("Running add motive clues a: " + a);
+            }
+        }
+    }
 
-                while (!clue_seeded) {
-                    // Try to add motive as a clue
-                    if (rand.nextInt(2) == 1) {
-                        Clue indicating_clue = motive_type.getRandomClue();
-                        if (!indicating_clue.isRelevant()) {
-                            indicating_clue.setRelevance(true);
-                            indicating_clue.setSuspectName(cast.getCharacter(a).getName());
-                            indicating_clue.setVictimName(cast.getCharacter(victim_index).getName());
-                            clue_seeded = true;
-                        }
-                    } else {
-                        String dialogue_clue = motive_type.getRandomHint(cast.getCharacter(a).getName(), cast.getCharacter(victim_index).getName());
-                        boolean dialogue_seeded = false;
-                        while(!dialogue_seeded) {
-                            for (int b = 0; b < cast.len(); b++) {
-                                if (a != b && cast.getCharacter(b).getRole() != 2) {
-                                    // Multiple people can have the same clue, usually only 1.
-                                    if (rand.nextInt(cast.len() - 2) == 0) {
-                                        cast.getCharacter(b).addDialogue(dialogue_clue);
-                                        dialogue_seeded = true;
-                                    }
-                                }
-                            }
-                        }
+    boolean trySeedMotive(Motives motives, Random rand, int a) {
+        // Choose a type of motive
+        MotiveType motive_type = motives.getRandomMotiveType();
+        // Try to add motive as a clue, weight probability towards dialogue because clues are finite
+        if (rand.nextInt(3) == 0) {
+            Clue indicating_clue = motive_type.getRandomClue();
+            if (!indicating_clue.inUse()) {
+                indicating_clue.setUsed();
+                indicating_clue.setSuspectName(cast.getCharacter(a).getName());
+                indicating_clue.setVictimName(cast.getCharacter(victim_index).getName());
+                return true;
+            }
+        } else {
+            String dialogue_clue = motive_type.getRandomHint(cast.getCharacter(a).getName(), cast.getCharacter(victim_index).getName());
+            boolean dialogue_seeded = false;
+            int successes = 0;
+            for (int b = 0; b < cast.len(); b++) {
+                if (a != b && cast.getCharacter(b).getRole() != 2 && successes < 4) {
+                    // Multiple people can have the same clue, usually only 1.
+                    if (rand.nextInt(cast.len()) == 0) {
+                        cast.getCharacter(b).addDialogue(dialogue_clue);
+                        successes++;
                     }
                 }
             }
+            return (successes > 0);
         }
-
-
-        // int murderer_index = 0;
-        // int victim_index = 1;
-        // murderer = cast.getCharacter(0);
-        // murderer.setRole(1);
-        // victim = cast.getCharacter(1);
-        // victim.setRole(2);
-        // Character bystander = cast.getCharacter(2);
-        // bystander.addDialogue("John hated Alistar, they argued frequently");
-        
-        // for (int i = 0; i < cast.len(); i++) {
-        //     // TODO properly place characters
-        //     cast.getCharacter(i).setPosition(i + 1, i + 2);
-        // }
-        
-        // // TODO handle physical clues
-        // for (int i = 0; i < clues.len(); i++) {
-        //     // TODO properly place clues in the mansion
-        //     clues.getClue(i).setPosition(-i - 1, -i - 2);
-        //     interactables.add(clues.getClue(i));
-        // }
+        return false;
     }
 
     CharacterCast getCast() {
@@ -102,6 +84,10 @@ class PlotGenerator {
 
     ClueObjects getClues() {
       return clues;
+    }
+
+    int getVictimIndex() {
+        return this.victim_index;
     }
 
     IProblem runSolver() {
@@ -208,7 +194,8 @@ class PlotGenerator {
                     murdered_by = " was bludgeoned";
                 }
                 clues.getBody().addHint(new ParameterisedDialogue("The police report says ", murdered_by, "", 5));
-                clues.getBody().setRelevance(true);
+                clues.getBody().setVictimName(cast.getCharacter(victim_index).getName());
+                clues.getBody().setUsed();
             }
         }
         // Return the new offset

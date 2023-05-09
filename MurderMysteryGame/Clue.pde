@@ -6,8 +6,7 @@ class Clue extends Interactable {
   private int hint_index;
   // Basic interaction text describing the object
   private ArrayList<String> clue_description;
-  private boolean is_relevant;
-  private String name;
+  private boolean in_use;
   private String suspect;
   private String victim;
 
@@ -16,19 +15,15 @@ class Clue extends Interactable {
     this.parameterised_hints = parameterised_hints;
     this.clue_description = clue_description;
     super.interactable_image = loadImage(image_loc);
-    this.is_relevant = false;
-  }
-  
-  public String getName() {
-    return name;
+    this.in_use = false;
   }
 
-  public boolean isRelevant() {
-    return is_relevant;
+  public boolean inUse() {
+    return this.in_use;
   }
 
-  public void setRelevance(boolean is_relevant) {
-    this.is_relevant = is_relevant;
+  public void setUsed() {
+    this.in_use = true;
   }
 
   public ArrayList<ParameterisedDialogue> getHints() {
@@ -41,7 +36,7 @@ class Clue extends Interactable {
 
   public String getNextHint() {
     String next_hint;
-    if (this.is_relevant) {
+    if (this.in_use) {
       if (hint_index >= clue_description.size()) {
         next_hint = parameterised_hints.get(hint_index - clue_description.size()).getDialogue(this.suspect, this.victim);
       } else {
@@ -63,7 +58,7 @@ class Clue extends Interactable {
   // Consider printing onto a 'notepad' which acts as a log
   // for all player interactions in order of interaction?
   public boolean interact() {
-    getNextHint();
+    System.out.println(getNextHint());
     return false;
   }
 

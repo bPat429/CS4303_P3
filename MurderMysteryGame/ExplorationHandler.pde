@@ -77,7 +77,16 @@ final class ExplorationHandler {
     interactables = new ArrayList<Interactable>();
     // Spawn in exit door for game over
     interactables.add(new FrontDoor(30, 0));
-        interactables.add(new FrontDoor(31, 0));
+    interactables.add(new FrontDoor(31, 0));
+
+    ClueObjects clues = plot_gen.getClues();
+    for (int i = 0; i < clues.len(); i++) {
+      interactables.add(clues.getClue(i));
+    }
+    WeaponObjects weapons = plot_gen.getWeapons();
+    for (int i = 0; i < weapons.len(); i++) {
+      interactables.add(weapons.getWeapon(i));
+    }
 
     generateMansion(); // call the method to generate the mansion/tile map
     this.search_cooldown = millis();
@@ -303,7 +312,7 @@ final class ExplorationHandler {
   
   // Draw all NPCs
   for (int i = 0; i < cast.len(); i++) {
-    if (cast.getCharacter(i) != null) {
+    if (i != plot_gen.getVictimIndex() && cast.getCharacter(i) != null) {
       cast.getCharacter(i).drawComponent(tile_size);
     }
   }

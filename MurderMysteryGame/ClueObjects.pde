@@ -45,9 +45,9 @@ final class ClueObjects {
     private Clue createBody() {
         ArrayList<String> description = new ArrayList<String>();
         ArrayList<ParameterisedDialogue> parameterised_hints = new ArrayList<ParameterisedDialogue>();
-        String image_loc = "body_outline.png";
+        String image_loc = "body_outline.jpg";
         description.add("The victim's body.");
-        return new Clue(-1, -1, "body", description, parameterised_hints, image_loc);
+        return new Clue(30, 5, "body", description, parameterised_hints, image_loc);
     }
     private Clue createNotebook() {
         ArrayList<String> description = new ArrayList<String>();
@@ -82,7 +82,7 @@ final class ClueObjects {
         description.add("A discarded letter.");
         parameterised_hints.add(new ParameterisedDialogue("The letter is addressed to ", 
             ", it reads: I cannot believe you're selling the sculpture, and to a complete stranger! I knew you didn't appreciate it as much as I do, but this is too far! We will discuss this when I return, ", "", 1));
-        return new Clue(-1, -1, "family_photo", description, parameterised_hints, image_loc);
+        return new Clue(-1, -1, "discarded_letter", description, parameterised_hints, image_loc);
     }
 
     // private Clue createCloth() {

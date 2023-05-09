@@ -20,6 +20,10 @@ class Interactable {
     this.type = type;
   }
 
+  public String getName() {
+    return this.name;
+  }
+
   float getInteractRadius() {
       return interact_radius;
   }

@@ -15,13 +15,25 @@ final class CharacterCast {
         // 4 = guest
 
         // Add John the Butler
-        cast.add(new Character("John", 0, rand, johnButlerDialogue()));   
+        cast.add(new Character(1, 2, "John", 0, rand, johnButlerDialogue(), "characters/john.png"));   
 
-        // Add Andrew the Maid
-        cast.add(new Character("Andrew", 1, rand, andrewMaidDialogue()));   
+        // Add Andrew, a maid
+        cast.add(new Character(2, 2, "Andrew", 1, rand, andrewMaidDialogue(), "characters/andrew.png"));  
 
-        // Add Elisa the Lady of the house
-        cast.add(new Character("Elisa", 2, rand, elisaOwnerDialogue()));
+        // Add Jane, a maid
+        cast.add(new Character(3, 2, "Jane", 1, rand, janeMaidDialogue(), "characters/jane.png"));  
+
+        // Add Alicia the Lady of the house
+        cast.add(new Character(4, 2, "Alicia", 2, rand, aliciaOwnerDialogue(), "characters/alicia.png"));
+
+        // Add Humphrey, the chef
+        cast.add(new Character(5, 2, "Humphrey", 3, rand, humphreyChefDialogue(), "characters/humphrey.png"));
+
+        // Add Lawrence, a guest
+        cast.add(new Character(6, 2, "Lawrence", 4, rand, lawrenceGuestDialogue(), "characters/lawrence.png"));
+
+        // Add Elisabeth, a guest
+        cast.add(new Character(7, 2, "Elisabeth", 4, rand, elisabethGuestDialogue(), "characters/elisabeth.png"));
     }
 
     public ArrayList<Character> getCast() {
@@ -39,21 +51,49 @@ final class CharacterCast {
     // Default dialogue for this character (not including clues)
     private ArrayList<String> johnButlerDialogue() {
         ArrayList<String> dialogue = new ArrayList<String>();
-        dialogue.add("Hello my name is John");
+        dialogue.add("Hello my name is John, I'm the butler.");
         return dialogue;
     }
 
     // Default dialogue for this character (not including clues)
     private ArrayList<String> andrewMaidDialogue() {
         ArrayList<String> dialogue = new ArrayList<String>();
-        dialogue.add("Hello my name is Andrew");
+        dialogue.add("Hello my name is Andrew, I'm a maid.");
         return dialogue;
     }
 
     // Default dialogue for this character (not including clues)
-    private ArrayList<String> elisaOwnerDialogue() {
+    private ArrayList<String> janeMaidDialogue() {
         ArrayList<String> dialogue = new ArrayList<String>();
-        dialogue.add("Hello my name is Elisa");
+        dialogue.add("Hello my name is Jane, I'm a maid.");
+        return dialogue;
+    }
+
+    // Default dialogue for this character (not including clues)
+    private ArrayList<String> aliciaOwnerDialogue() {
+        ArrayList<String> dialogue = new ArrayList<String>();
+        dialogue.add("Hello my name is Alicia, I own this mansion.");
+        return dialogue;
+    }
+
+    // Default dialogue for this character (not including clues)
+    private ArrayList<String> humphreyChefDialogue() {
+        ArrayList<String> dialogue = new ArrayList<String>();
+        dialogue.add("Hello my name is Humphrey, I'm the chef.");
+        return dialogue;
+    }
+
+    // Default dialogue for this character (not including clues)
+    private ArrayList<String> lawrenceGuestDialogue() {
+        ArrayList<String> dialogue = new ArrayList<String>();
+        dialogue.add("Hello my name is Lawrence, I'm a guest.");
+        return dialogue;
+    }
+
+    // Default dialogue for this character (not including clues)
+    private ArrayList<String> elisabethGuestDialogue() {
+        ArrayList<String> dialogue = new ArrayList<String>();
+        dialogue.add("Hello my name is Elisabeth, I'm a guest.");
         return dialogue;
     }
 }
