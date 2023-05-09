@@ -18,22 +18,22 @@ final class CharacterCast {
         cast.add(new Character(1, 2, "John", 0, rand, johnButlerDialogue(), "characters/john.png"));   
 
         // Add Andrew, a maid
-        cast.add(new Character(2, 2, "Andrew", 1, rand, andrewMaidDialogue(), "characters/andrew.png"));  
+        cast.add(new Character(32, 5, "Andrew", 1, rand, andrewMaidDialogue(), "characters/andrew.png"));  
 
         // Add Jane, a maid
         cast.add(new Character(3, 2, "Jane", 1, rand, janeMaidDialogue(), "characters/jane.png"));  
 
         // Add Alicia the Lady of the house
-        cast.add(new Character(4, 2, "Alicia", 2, rand, aliciaOwnerDialogue(), "characters/alicia.png"));
+        cast.add(new Character(19, 8, "Alicia", 2, rand, aliciaOwnerDialogue(), "characters/alicia.png"));
 
         // Add Humphrey, the chef
-        cast.add(new Character(5, 2, "Humphrey", 3, rand, humphreyChefDialogue(), "characters/humphrey.png"));
+        cast.add(new Character(14, 3, "Humphrey", 3, rand, humphreyChefDialogue(), "characters/humphrey.png"));
 
         // Add Lawrence, a guest
         cast.add(new Character(6, 2, "Lawrence", 4, rand, lawrenceGuestDialogue(), "characters/lawrence.png"));
 
         // Add Elisabeth, a guest
-        cast.add(new Character(7, 2, "Elisabeth", 4, rand, elisabethGuestDialogue(), "characters/elisabeth.png"));
+        cast.add(new Character(28, 5, "Elisabeth", 4, rand, elisabethGuestDialogue(), "characters/elisabeth.png"));
     }
 
     public ArrayList<Character> getCast() {

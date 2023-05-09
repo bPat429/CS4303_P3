@@ -55,7 +55,7 @@ final class ClueObjects {
         String image_loc = "notebook.png";
         description.add("A small notebook.");
         parameterised_hints.add(new ParameterisedDialogue("", " and ", " won't stop arguing, they're behaving like children!", 0));
-        return new Clue(-1, -1, "notebook", description, parameterised_hints, image_loc);
+        return new Clue(10, 12, "notebook", description, parameterised_hints, image_loc);
     }
 
     private Clue createSafe() {
@@ -64,7 +64,7 @@ final class ClueObjects {
         String image_loc = "safe.png";
         description.add("A safe.");
         parameterised_hints.add(new ParameterisedDialogue("", " and ", " won't stop arguing, they're behaving like children!", 0));
-        return new Clue(-1, -1, "safe", description, parameterised_hints, image_loc);
+        return new Clue(5, 15, "safe", description, parameterised_hints, image_loc);
     }
     private Clue createFamilyPhoto() {
         ArrayList<String> description = new ArrayList<String>();
@@ -73,8 +73,9 @@ final class ClueObjects {
         description.add("An old family photo.");
         parameterised_hints.add(new ParameterisedDialogue("You recognise ", ", but no one else. On the back they have written: How can you rest mother, while ", 
             " goes unpunished.", 0));
-        return new Clue(-1, -1, "family_photo", description, parameterised_hints, image_loc);
+        return new Clue(34, 17, "family_photo", description, parameterised_hints, image_loc);
     }
+    
     private Clue createDiscardedLetter() {
         ArrayList<String> description = new ArrayList<String>();
         ArrayList<ParameterisedDialogue> parameterised_hints = new ArrayList<ParameterisedDialogue>();
@@ -82,7 +83,8 @@ final class ClueObjects {
         description.add("A discarded letter.");
         parameterised_hints.add(new ParameterisedDialogue("The letter is addressed to ", 
             ", it reads: I cannot believe you're selling the sculpture, and to a complete stranger! I knew you didn't appreciate it as much as I do, but this is too far! We will discuss this when I return, ", "", 1));
-        return new Clue(-1, -1, "discarded_letter", description, parameterised_hints, image_loc);
+        return new Clue(14,9, "discarded_letter", description, parameterised_hints, image_loc);
+        
     }
 
     // private Clue createCloth() {
