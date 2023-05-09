@@ -52,9 +52,10 @@ class SatFileWriter {
 
     void writeSatFile(PrintWriter output_file) {
         output_file.println("p cnf " + countFluentsNeeded() + " " + sat_clauses.size());
-        for (int i = 0; i < sat_clauses.size(); i++) {
+        for (int i = 0; i < sat_clauses.size() - 1; i++) {
             output_file.println(sat_clauses.get(i));
         }
+        output_file.print(sat_clauses.get(sat_clauses.size() - 1));
     }
 
     void clearSATFile() {
@@ -93,9 +94,9 @@ class SatFileWriter {
         generateAlibiClauses();
         generateHasAlibiClauses();
         generateHasMurderedClauses(murderer_index, victim_index);
-        generateIsMurdererClauses(murderer_index); // TODO
-        generateIsVictimClauses(victim_index); // TODO
-        generateIsBystanderClauses(murderer_index, victim_index); // TODO
+        generateIsMurdererClauses(murderer_index);
+        generateIsVictimClauses(victim_index);
+        generateIsBystanderClauses(murderer_index, victim_index);
         generateHasUsedWeaponClauses();
     }
 
@@ -264,9 +265,6 @@ class SatFileWriter {
     // Offset after this = (n ^ 2) + n
     int getHasAlibiFluent(int char_a_index) {
         int offset = (int) Math.pow(n, 2) + 1;
-        System.out.println("a = " + (char_a_index));
-        System.out.println("n = " + (offset));
-        System.out.println("n = " + (offset + char_a_index));
         return offset + char_a_index;
     }
 
@@ -288,41 +286,41 @@ class SatFileWriter {
     // Offset after this = (n^2) + 2*n + (n*m) + 1
     int getHasMurderedFluent() {
         int offset = (int) Math.pow(n, 2) + 2*n + (n * m) + 1;
-        return offset + 1;
+        return offset;
     }
 
     // Is_Murderer is listed sixth
     // Offset after this = (n^2) + 3*n + (n*m) + 1
     int getIsMurdererFluent(int char_a_index) {
-        int offset = (int) Math.pow(n, 2) + 2*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 2*n + (n * m) + 1 + 1;
         return offset + char_a_index;
     }
 
     // Is_Victim is listed seventh
     // Offset after this = (n^2) + 4*n + (n*m) + 1
     int getIsVictimFluent(int char_a_index) {
-        int offset = (int) Math.pow(n, 2) + 3*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 3*n + (n*m) + 2;
         return offset + char_a_index;
     }
 
     // Is_Bystander is listed eigth
     // Offset after this = (n^2) + 5*n + (n*m) + 1
     int getIsBystanderFluent(int char_a_index) {
-        int offset = (int) Math.pow(n, 2) + 4*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 4*n + (n*m) + 2;
         return offset + char_a_index;
     }
 
     // Has_Used_Weapon is listed ninth
     // Offset after this = (n^2) + 5*n + (n*m) + 2
     int getHasUsedWeaponFluent() {
-        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 1;
+        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 2;
         return offset + 1;
     }
 
     // Weapon_Used is listed tenth
     // Offset after this = (n^2) + 5*n + (n*m) + 2 + m
     int getWeaponUsedFluent(int weapon_c_index) {
-        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 1 + 1;
+        int offset = (int) Math.pow(n, 2) + 5*n + (n*m) + 3;
         return offset + weapon_c_index;
     }
 }
