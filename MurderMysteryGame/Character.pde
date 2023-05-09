@@ -7,6 +7,8 @@ class Character extends Entity {
     // keep a copy of rand so we can randomly choose between dialogue options etc.
     Random rand;
     private ArrayList<String> dialogue;
+    // index 0 = standard greeting
+    // index > 0 = clues and hints
     private ArrayList<Character> alibi_list;
     // Set of indexes for weapons this character has access to
     private ArrayList<Weapon> accessable_weapons;
@@ -76,6 +78,27 @@ class Character extends Entity {
 
     ArrayList<String> getDialogue() {
         return dialogue;
+    }
+
+    String getDialogueHints() {
+        String dialogue_hints = "";
+        if (dialogue.size() == 1) {
+            return "Sorry, I don't think I know anything useful.";
+        } else {
+            dialogue_hints = dialogue.get(1);
+            for (int i = 2; i < dialogue.size(); i++) {
+                dialogue_hints = dialogue_hints + " " + dialogue.get(i);
+            }
+        }
+        return dialogue_hints;
+    }
+
+    String getGreeting() {
+        return dialogue.get(0);
+    }
+
+    String getClueDialogue() {
+        return dialogue.get(1);
     }
 
     void setRole(int i) {
