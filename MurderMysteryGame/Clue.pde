@@ -9,10 +9,11 @@ class Clue extends Interactable {
   private boolean is_relevant;
   private String name;
   private String suspect;
+  private String victim;
 
-  Clue(int x_pos, int y_pos, String name, ArrayList<String> clue_description, String image_loc) {
+  Clue(int x_pos, int y_pos, String name, ArrayList<String> clue_description, ArrayList<ParameterisedDialogue> parameterised_hints, String image_loc) {
     super(x_pos, y_pos, 0, name);
-    this.parameterised_hints = new ArrayList<ParameterisedDialogue>();
+    this.parameterised_hints = parameterised_hints;
     this.clue_description = clue_description;
     super.interactable_image = loadImage(image_loc);
     this.is_relevant = false;
@@ -38,15 +39,21 @@ class Clue extends Interactable {
     parameterised_hints.add(hint);
   }
 
-  public String getNextHint(String victim) {
+  public String getNextHint() {
     String next_hint;
-    if (hint_index >= clue_description.size() && parameterised_hints.size() > 0) {
-      next_hint = parameterised_hints.get(hint_index - clue_description.size()).getDialogue(suspect, victim);
-    } else {
-      next_hint = clue_description.get(hint_index);
-    }
+    if (this.is_relevant) {
+      if (hint_index >= clue_description.size()) {
+        next_hint = parameterised_hints.get(hint_index - clue_description.size()).getDialogue(this.suspect, this.victim);
+      } else {
+        next_hint = clue_description.get(hint_index);
+      }
+      hint_index++;
+      hint_index = (hint_index >= parameterised_hints.size() + clue_description.size()) ? 0 : hint_index;
+      return next_hint;
+    }    
+    next_hint = clue_description.get(hint_index);
     hint_index++;
-    hint_index = (hint_index >= clue_description.size() + parameterised_hints.size()) ? 0 : hint_index;
+    hint_index = (hint_index >= clue_description.size()) ? 0 : hint_index;
     return next_hint;
   }
   
@@ -55,8 +62,8 @@ class Clue extends Interactable {
   // Currently prints to the terminal when interacted with
   // Consider printing onto a 'notepad' which acts as a log
   // for all player interactions in order of interaction?
-  public boolean interact(String victim) {
-    getNextHint(victim);
+  public boolean interact() {
+    getNextHint();
     return false;
   }
 
@@ -64,7 +71,15 @@ class Clue extends Interactable {
       super.setLocation(x_pos, y_pos);
   }
 
-  void setSuspect(String suspect) {
+  // If this hints at a suspects motive we need to record which suspect
+  // Each clue may hint at exactly one suspect
+  void setSuspectName(String suspect) {
     this.suspect = suspect;
+  }
+
+  // If this hints at a suspects motive we need to record which suspect
+  // Each clue may hint at exactly one suspect
+  void setVictimName(String victim) {
+    this.victim = victim;
   }
 }

@@ -31,6 +31,10 @@ public class Entity {
         this.entity_speed = 4;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     PVector getLocation() {
         return location;
     }

@@ -4,31 +4,35 @@ import java.util.Random;
 // The possible motives a character may have for murder
 
 final class Motives {
-    private ArrayList<Motive> motives;
+    private ArrayList<MotiveType> motives;
 
-    Motives(Random rand) {
-        motives = new ArrayList<Motive>();
+    Motives(Random rand, ClueObjects clues) {
+        motives = new ArrayList<MotiveType>();
         // Motives (TODO):
         // The murderer was in love with the victim, but the victim didn't reciprocate
         // The murderer and victim were rivals in affection for another character
         // The murderer was a psycopath
 
         // The murderer and victim were in a heated argument
-        motives.add(new Motive("argument", rand, argumentDialogue(), argumentClues()));   
+        motives.add(new MotiveType("argument", rand, argumentDialogue(), argumentClues(clues)));   
 
         // The murderer believed the victim stole from them
-        motives.add(new Motive("revenge", rand, revengeDialogue(), revengeClues()));   
+        motives.add(new MotiveType("revenge", rand, revengeDialogue(), revengeClues(clues)));   
 
         // The murderer wanted something from the victim
-        motives.add(new Motive("greed", rand, greedDialogue(), greedClues()));
+        motives.add(new MotiveType("greed", rand, greedDialogue(), greedClues(clues)));
     }
 
-    public ArrayList<Motive> getMotives() {
+    public ArrayList<MotiveType> getMotives() {
         return motives;
     }
 
-    public Motive getMotive(int i) {
+    public MotiveType getMotiveType(int i) {
         return motives.get(i);
+    }
+
+    public MotiveType getRandomMotiveType() {
+        return motives.get(rand.nextInt(motives.size()));
     }
 
     public int len() {
@@ -78,20 +82,27 @@ final class Motives {
         return dialogue;
     }
 
-    // Clues TODO
+    // Clues
+    // n.b. Each distinct clue (e.g. Notebook) may only be a clue for one type of method
 
-    private ArrayList<Clue> argumentClues() {
-        ArrayList<Clue> clues = new ArrayList<Clue>();
-        return clues;
+    private ArrayList<Clue> argumentClues(ClueObjects clues) {
+        ArrayList<Clue> method_clues = new ArrayList<Clue>();
+        // Notebook
+        method_clues.add(clues.getClue(1));
+        return method_clues;
     }
 
-    private ArrayList<Clue> revengeClues() {
-        ArrayList<Clue> clues = new ArrayList<Clue>();
-        return clues;
+    private ArrayList<Clue> revengeClues(ClueObjects clues) {
+        ArrayList<Clue> method_clues = new ArrayList<Clue>();
+        // An old family photo
+        method_clues.add(clues.getClue(3));
+        return method_clues;
     }
 
-    private ArrayList<Clue> greedClues() {
-        ArrayList<Clue> clues = new ArrayList<Clue>();
-        return clues;
+    private ArrayList<Clue> greedClues(ClueObjects clues) {
+        ArrayList<Clue> method_clues = new ArrayList<Clue>();
+        // discarded letter
+        method_clues.add(clues.getClue(4));
+        return method_clues;
     }
 }

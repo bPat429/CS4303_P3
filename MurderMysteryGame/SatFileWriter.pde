@@ -11,6 +11,7 @@ class SatFileWriter {
     private PrintWriter sat_file;
     private int n;
     private int m;
+    private int victim_index;
 
     SatFileWriter(CharacterCast cast, WeaponObjects weapons, Random rand) {
         this.cast = cast;
@@ -23,7 +24,7 @@ class SatFileWriter {
         // are more likely (TODO mention this in the report)
         int murderer_index = rand.nextInt(cast.len());
         boolean victim_chosen = false;
-        int victim_index = -1;
+        victim_index = -1;
         while (!victim_chosen) {
             // Randomly select a victim from the cast, avoid choosing the murderer
             victim_index = rand.nextInt(cast.len());
@@ -43,6 +44,10 @@ class SatFileWriter {
 
         sat_file.flush();
         sat_file.close();
+    }
+
+    int getVictimIndex() {
+        return this.victim_index;
     }
 
     void writeComments(PrintWriter output_file) {

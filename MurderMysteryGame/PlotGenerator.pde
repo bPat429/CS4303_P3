@@ -28,7 +28,49 @@ class PlotGenerator {
         }
 
         // Apply changes to the cast of characters according to the generated plan
-        applyAlibis(problem);
+        applyPlot(problem);
+        Motives motives = new Motives(rand, clues);
+
+        // TODO
+        int victim_index = sat_writer.getVictimIndex();
+
+        // For each character with a motive seed either a clue, or a dialogue line in another living character indicating the motive
+        for (int a = 0; a < cast.len(); a++) {
+            if (cast.getCharacter(a).hasMotive()) {
+                boolean clue_seeded = false;
+                // Choose a type of motive
+                MotiveType motive_type = motives.getRandomMotiveType();
+
+                while (!clue_seeded) {
+                    // Try to add motive as a clue
+                    if (rand.nextInt(2) == 1) {
+                        Clue indicating_clue = motive_type.getRandomClue();
+                        if (!indicating_clue.isRelevant()) {
+                            indicating_clue.setRelevance(true);
+                            indicating_clue.setSuspectName(cast.getCharacter(a).getName());
+                            indicating_clue.setVictimName(cast.getCharacter(victim_index).getName());
+                            clue_seeded = true;
+                        }
+                    } else {
+                        String dialogue_clue = motive_type.getRandomHint(cast.getCharacter(a).getName(), cast.getCharacter(victim_index).getName());
+                        boolean dialogue_seeded = false;
+                        while(!dialogue_seeded) {
+                            for (int b = 0; b < cast.len(); b++) {
+                                if (a != b && cast.getCharacter(b).getRole() != 2) {
+                                    // Multiple people can have the same clue, usually only 1.
+                                    if (rand.nextInt(cast.len() - 2) == 0) {
+                                        cast.getCharacter(b).addDialogue(dialogue_clue);
+                                        dialogue_seeded = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         // int murderer_index = 0;
         // int victim_index = 1;
         // murderer = cast.getCharacter(0);
@@ -167,6 +209,7 @@ class PlotGenerator {
                     murdered_by = " was bludgeoned";
                 }
                 clues.getBody().addHint(new ParameterisedDialogue("The police report says ", murdered_by, "", 5));
+                clues.getBody().setRelevance(true);
             }
         }
         // Return the new offset
