@@ -11,6 +11,11 @@ ExplorationHandler exploration_handler;
 
 // Current screen
 int current_screen;
+// -1 = Intro screen
+// -2 = Exploration screen
+// -3 = Character accusation screen
+// -4 = Ending screen
+// (x > -1) = Conversation screen (x = character index)
 
 // Global variables
 float prev_frame_millis;
@@ -24,31 +29,39 @@ boolean[] input_array = new boolean[]{false, false, false, false, false, false, 
 void setup() {
     fullScreen();
     rand = new Random();
-    current_screen = 0;
+    current_screen = -1;
     exploration_handler = new ExplorationHandler(tile_size, rand);
 }
 
 void enterExplorationScreen() {
     prev_frame_millis = millis();
-    current_screen = 1;
+    current_screen = -2;
 }
 
 void draw() {
     switch (current_screen) {
-        case 0:
+        case -1:
             // Intro screen
-            current_screen = 1;
+            // TODO
+            enterExplorationScreen();
             break;
-        case 1:
+        case -2:
             frame_duration = (millis() - prev_frame_millis)/1000;
             // Exploration screen
-            exploration_handler.run(input_array, frame_duration);
+            current_screen = exploration_handler.run(input_array, frame_duration);
             break;
-        case 2:
+        case -3:
+            // Character accusation screen
+            // TODO
+            break;
+        case -4:
             // Ending screen
+            // TODO
             break;
         default:
+            // Conversation screen
             // TODO
+            // current_screen = character index
     }
     prev_frame_millis = millis();
 }

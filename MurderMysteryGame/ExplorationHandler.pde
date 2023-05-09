@@ -60,13 +60,6 @@ final class ExplorationHandler {
     tile9 = loadImage("tile9.png");
     tile9.resize(tile_size, tile_size);
     
-    
-    
-    
-    
-    
-    
-    
     // Generate the plot
     plot_gen = new PlotGenerator(rand);
     cast = plot_gen.getCast();
