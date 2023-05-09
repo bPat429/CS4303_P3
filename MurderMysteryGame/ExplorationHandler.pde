@@ -18,7 +18,7 @@ final class ExplorationHandler {
     private ArrayList<Interactable> interactables;
     private Random rand;
     // A cooldown used to avoid accidentally repeating the interact action due to high framerate
-    private float search_cooldown;
+    private float interact_cooldown;
  PImage tile1, tile0, tile2, tile3,tile4,tile5,tile6,tile7,tile8, tile9;
     // The size of each tile
     private int tile_size;
@@ -82,8 +82,13 @@ final class ExplorationHandler {
     }
 
     generateMansion(); // call the method to generate the mansion/tile map
-    this.search_cooldown = millis();
+    this.interact_cooldown = millis();
 }
+
+  // Reset the interact cooldown to prevent accidentally re-interacting with a character after leaving their dialogue screen
+  void resetInteractCooldown() {
+    this.interact_cooldown = millis();
+  }
 
 
 
@@ -184,14 +189,14 @@ final class ExplorationHandler {
 
         // Check if the player is trying to interact with an item
         // Impose a cooldown because the player doesn't need to search the same place several times
-        if (input_array[4] && (millis() - search_cooldown) > 400) {
-            search_cooldown = millis();
+        if (input_array[4] && (millis() - interact_cooldown) > 400) {
+            interact_cooldown = millis();
             // Check if any items are close
             int index = checkInteractablessProximity();
             if (index > -1) {
                 // If the front door then trigger the final screen
                 if(interactables.get(index).getType() == 2) {
-                    // TODO
+                    return -3;
                 }
                 // TODO implement interactions
                 interactables.get(index).interact();
